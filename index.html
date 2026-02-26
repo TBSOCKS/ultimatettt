@@ -3,19 +3,19 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>BBH22 — Category Kings</title>
+<title>BBH22 — Ultimate Tic Tac Trivia</title>
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
   :root {
-    --bg: #0a0a0f;
-    --surface: #13131a;
-    --border: #2a2a3a;
-    --text: #e8e8f0;
-    --muted: #666680;
-    --accent: #f0c040;
-    --p1: #e85d5d;
-    --p2: #5d9ee8;
-  }
+  --bg: #f0f4f8;
+  --surface: #dce8f5;
+  --border: #b0c8e0;
+  --text: #1a1a2e;
+  --muted: #5a6a80;
+  --accent: #2a7de1;
+  --p1: #e85d5d;
+  --p2: #5d9ee8;
+}
   * { margin: 0; padding: 0; box-sizing: border-box; }
   body { background: var(--bg); color: var(--text); font-family: 'DM Sans', sans-serif; min-height: 100vh; overflow-x: hidden; }
 
@@ -23,11 +23,11 @@
   #setup-screen {
     display: flex; flex-direction: column; align-items: center; justify-content: center;
     min-height: 100vh; padding: 40px 20px;
-    background: radial-gradient(ellipse at 50% 0%, #1a1a2e 0%, var(--bg) 70%);
+    background: #f0f4f8;
   }
-  .setup-title { font-family: 'Bebas Neue', sans-serif; font-size: clamp(48px,8vw,96px); letter-spacing: 6px; color: var(--accent); text-align: center; line-height: 1; margin-bottom: 8px; text-shadow: 0 0 60px rgba(240,192,64,0.3); }
+  .setup-title { font-family: 'Bebas Neue', sans-serif; font-size: clamp(48px,8vw,96px); letter-spacing: 6px; color: #2a7de1; text-align: center; line-height: 1; margin-bottom: 8px; text-shadow: none; }
   .setup-subtitle { font-size: 13px; letter-spacing: 4px; text-transform: uppercase; color: var(--muted); margin-bottom: 48px; }
-  .setup-card { background: var(--surface); border: 1px solid var(--border); border-radius: 16px; padding: 40px; width: 100%; max-width: 640px; display: flex; flex-direction: column; gap: 32px; }
+  .setup-card { background: #ffffff; border: 1px solid #b0c8e0; border-radius: 16px; padding: 40px; width: 100%; max-width: 640px; display: flex; flex-direction: column; gap: 32px; }
   .players-row { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
   .player-setup { display: flex; flex-direction: column; gap: 12px; }
   .player-label { font-family: 'Bebas Neue', sans-serif; font-size: 22px; letter-spacing: 3px; }
@@ -62,26 +62,26 @@
   }
 
   .corner-cell { background: transparent; }
-  .macro-divider-col { background: var(--accent); opacity: 0.5; border-radius: 2px; }
-  .macro-divider-row { background: var(--accent); opacity: 0.5; border-radius: 2px; }
+  .macro-divider-col { background: #2a7de1; opacity: 1; border-radius: 2px; }
+  .macro-divider-row { background: #2a7de1; opacity: 1; border-radius: 2px; }
 
   .col-header {
-    background: #1a1a28; border: 1px solid var(--border); border-radius: 5px;
+    background: #c8dff5; border: 1px solid var(--border); border-radius: 5px;
     padding: 6px 4px; font-size: 9px; font-weight: 600; letter-spacing: 0.3px;
-    text-align: center; color: var(--muted); line-height: 1.3;
+    text-align: center; color: #1a2a3a; line-height: 1.3;
     display: flex; align-items: center; justify-content: center;
   }
   .col-header.macro-group-start { border-top: 2px solid var(--accent); }
 
   .row-header {
-    background: #1a1a28; border: 1px solid var(--border); border-radius: 5px;
+    background: #c8dff5; border: 1px solid var(--border); border-radius: 5px;
     padding: 6px 8px; font-size: 9px; font-weight: 600; letter-spacing: 0.3px;
-    color: var(--muted); line-height: 1.3; display: flex; align-items: center;
+    color: #1a2a3a; line-height: 1.3; display: flex; align-items: center;
   }
   .row-header.macro-group-start { border-left: 2px solid var(--accent); }
 
   .grid-cell {
-    background: var(--surface); border: 1px solid var(--border); border-radius: 5px;
+    background: var(--surface); border: 1px solid #b0c8e0; border-radius: 5px;
     aspect-ratio: 1; cursor: pointer; position: relative; overflow: hidden;
     transition: transform 0.12s, border-color 0.15s; min-height: 55px;
   }
@@ -105,17 +105,17 @@
   /* ===== MODAL ===== */
   #modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.8); z-index: 100; align-items: center; justify-content: center; backdrop-filter: blur(6px); }
   #modal-overlay.open { display: flex; }
-  .modal { background: var(--surface); border: 1px solid var(--border); border-radius: 20px; padding: 28px; width: 92%; max-width: 480px; display: flex; flex-direction: column; gap: 18px; animation: modal-in 0.22s ease; max-height: 90vh; overflow-y: auto; }
+  .modal { background: #ffffff; border: 1px solid #b0c8e0; border-radius: 20px; padding: 28px; width: 92%; max-width: 480px; display: flex; flex-direction: column; gap: 18px; animation: modal-in 0.22s ease; max-height: 90vh; overflow-y: auto; }
   @keyframes modal-in { from { transform: translateY(16px) scale(0.97); opacity: 0; } to { transform: none; opacity: 1; } }
 
   .modal-cats { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
-  .modal-cat { background: var(--bg); border-radius: 8px; padding: 10px 12px; font-size: 11px; font-weight: 600; color: var(--muted); line-height: 1.4; }
+  .modal-cat { background: #eaf2ff; border-radius: 8px; padding: 10px 12px; font-size: 11px; font-weight: 600; color: #1a2a3a; line-height: 1.4; }
   .modal-cat span { display: block; font-size: 9px; text-transform: uppercase; letter-spacing: 1px; color: var(--accent); margin-bottom: 3px; }
 
   .modal-label { font-size: 10px; text-transform: uppercase; letter-spacing: 1.5px; color: var(--muted); margin-bottom: 6px; }
 
   /* Dropdown */
-  .answer-select { width: 100%; background: var(--bg); border: 1px solid var(--border); border-radius: 10px; padding: 12px 14px; color: var(--text); font-family: 'DM Sans', sans-serif; font-size: 15px; cursor: pointer; appearance: none; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23666680' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 14px center; padding-right: 36px; }
+  .answer-select { width: 100%; background: #eaf2ff; border: 1px solid var(--border); border-radius: 10px; padding: 12px 14px; color: #1a2a3a; font-family: 'DM Sans', sans-serif; font-size: 15px; cursor: pointer; appearance: none; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23666680' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 14px center; padding-right: 36px; }
   .answer-select:focus { outline: none; border-color: var(--accent); }
   .answer-select option { background: #1e1e2e; }
 
@@ -123,7 +123,7 @@
   .cast-roster { display: flex; flex-wrap: wrap; gap: 6px; }
   .cast-tag {
     padding: 5px 10px; border-radius: 20px; font-size: 11px; font-weight: 600;
-    background: var(--bg); border: 1px solid var(--border); color: var(--text);
+    background: #eaf2ff; border: 1px solid #b0c8e0; color: #1a2a3a;
     transition: all 0.15s; white-space: nowrap;
   }
   .cast-tag.strikeout { text-decoration: line-through; opacity: 0.35; color: var(--muted); }
@@ -150,7 +150,7 @@
 <!-- ========== SETUP ========== -->
 <div id="setup-screen">
   <div class="setup-title">BBH22</div>
-  <div class="setup-subtitle">Category Kings · Season Trivia</div>
+  <div class="setup-subtitle">Ultimate Tic Tac Trivia · Season Trivia</div>
   <div class="setup-card">
     <div class="players-row">
       <div class="player-setup">
@@ -225,7 +225,7 @@
 <!-- ========== WIN ========== -->
 <div id="win-screen">
   <div class="win-title" id="win-name">PLAYER 1</div>
-  <div class="win-sub">wins Category Kings!</div>
+  <div class="win-sub">wins Ultimate Tic Tac Trivia!</div>
   <button class="win-restart" onclick="location.reload()">PLAY AGAIN</button>
 </div>
 
