@@ -405,8 +405,10 @@ function commitCorrect(r,c,name) {
     if(scores[0]>=3||scores[1]>=3){closeModal();showWinScreen(res);return;}
   }
   const nm=r%3,nc=c%3;
-  forcedMacro=won?null:(miniWon[nm][nc]!==null||isMiniGridFull(nm,nc))?null:{mr:nm,mc:nc};
-  currentPlayer=1-currentPlayer;closeModal();updateUI();
+if(won){
+  forcedMacro=(miniWon[nm][nc]===null&&!isMiniGridFull(nm,nc))?{mr:nm,mc:nc}:null;
+}else{
+  forcedMacro=(miniWon[nm][nc]!==null||isMiniGridFull(nm,nc))?null:{mr:nm,mc:nc};
 }
 
 function closeModal(){document.getElementById('modal-overlay').classList.remove('open');activeCell=null;}
@@ -438,11 +440,13 @@ function renderMiniWon(mr,mc,p){
   const col=players[p].color;
   for(let i=0;i<3;i++)for(let j=0;j<3;j++){
     const cell=document.getElementById(`cell-${mr*3+i}-${mc*3+j}`);
-    cell.style.background=`color-mix(in srgb,${col} 30%,var(--cell-bg))`;
-    const ov=document.createElement('div');ov.className='mini-won-overlay';
-    ov.style.cssText=`background:color-mix(in srgb,${col} 18%,transparent);border:3px solid ${col};`;
-    if(i===1&&j===1){ov.style.color=col;ov.style.fontFamily="'Bebas Neue',sans-serif";ov.style.fontSize='13px';ov.textContent=players[p].name.substring(0,5).toUpperCase();}
-    cell.appendChild(ov);
+    cell.classList.add('claimed');
+    cell.innerHTML='';
+    cell.style.background=col;
+    const n=document.createElement('div');
+    n.style.cssText='position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-family:\'Bebas Neue\',sans-serif;font-size:11px;letter-spacing:1px;color:#fff;text-shadow:0 1px 3px rgba(0,0,0,0.4);text-align:center;padding:2px;';
+    n.textContent=players[p].name.toUpperCase();
+    cell.appendChild(n);
   }
 }
 
