@@ -352,10 +352,12 @@ function submitAnswer(){
   if(VALID_ANSWERS[r][c].includes(name)){
     document.getElementById('modal-inner').innerHTML=`<div class="modal-correct" style="color:${players[currentPlayer].color}">CORRECT!</div>`;
     setTimeout(()=>commitCorrect(r,c,name),900);
-  }else{
-    wrongGuesses[r][c].add(name);refreshCastList(r,c);
-    if(sel){sel.style.borderColor='#e85d5d';sel.style.color='#e85d5d';setTimeout(()=>{sel.style.borderColor='';sel.style.color='';},600);}
-    forcedMacro=null;currentPlayer=1-currentPlayer;closeModal();updateUI();
+  } else {
+    wrongGuesses[r][c].add(name);
+    document.getElementById('modal-inner').innerHTML=`<div class="modal-correct" style="color:#e85d5d">INCORRECT!</div>`;
+    setTimeout(()=>{
+      forcedMacro=null; currentPlayer=1-currentPlayer; closeModal(); updateUI();
+    }, 900);
   }
 }
 
