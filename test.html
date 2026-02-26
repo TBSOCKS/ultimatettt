@@ -376,7 +376,7 @@ function commitCorrect(r,c,name){
 }else{
   forcedMacro=(miniWon[nm][nc]!==null||isMiniGridFull(nm,nc))?null:{mr:nm,mc:nc};
 }
-  currentPlayer=1-currentPlayer;closeModal();updateUI();
+  lastGuessed=name;currentPlayer=1-currentPlayer;closeModal();updateUI();
 }
 
 function closeModal(){document.getElementById('modal-overlay').classList.remove('open');activeCell=null;}
