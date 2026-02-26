@@ -56,7 +56,7 @@
   .turn-name { font-size: 16px; display: block; }
 
   /* ===== MEGA GRID ===== */
-  .grid-wrapper { overflow: auto; flex: 1; border: 3px solid var(--divider); border-radius: 4px; background: var(--divider); }
+  .grid-wrapper { overflow: auto; flex: 1; border: 3px solid var(--divider); border-radius: 4px; background: var(--divider); overflow-x: auto; overflow-y: auto; }
   .mega-grid {
     display: grid;
     grid-template-columns: 120px repeat(3,1fr) 3px repeat(3,1fr) 3px repeat(3,1fr);
@@ -65,21 +65,23 @@
     gap: 0;
   }
 
-  .corner-cell { background: var(--header-bg); border-right: 1px solid var(--border); border-bottom: 1px solid var(--border); }
+  .corner-cell { background: var(--header-bg); border-right: 1px solid var(--border); border-bottom: 1px solid var(--border); position: sticky; top: 0; z-index: 21; }
   .macro-divider-col { background: var(--divider); grid-row: 1/-1; }
   .macro-divider-row { background: var(--divider); grid-column: 1/-1; }
 
   .col-header {
-    background: var(--header-bg); border-right: 1px solid var(--border); border-bottom: 1px solid var(--border);
-    padding: 5px 4px; font-size: 9px; font-weight: 700; text-align: center;
-    color: var(--text); line-height: 1.25; display: flex; align-items: center; justify-content: center;
-    text-transform: uppercase; letter-spacing: 0.2px;
-  }
+  background: var(--header-bg); border-right: 1px solid var(--border); border-bottom: 1px solid var(--border);
+  padding: 5px 4px; font-size: 9px; font-weight: 700; text-align: center;
+  color: var(--text); line-height: 1.25; display: flex; align-items: center; justify-content: center;
+  text-transform: uppercase; letter-spacing: 0.2px;
+  position: sticky; top: 0; z-index: 20;
+}
   .row-header {
-    background: var(--header-bg); border-right: 1px solid var(--border); border-bottom: 1px solid var(--border);
-    padding: 5px 7px; font-size: 9px; font-weight: 700; color: var(--text);
-    line-height: 1.25; display: flex; align-items: center; text-transform: uppercase; letter-spacing: 0.2px;
-  }
+  background: var(--header-bg); border-right: 1px solid var(--border); border-bottom: 1px solid var(--border);
+  padding: 5px 7px; font-size: 9px; font-weight: 700; color: var(--text);
+  line-height: 1.25; display: flex; align-items: center; text-transform: uppercase; letter-spacing: 0.2px;
+  justify-content: center; text-align: center;
+}
 
   .grid-cell {
     background: var(--cell-bg); border-right: 1px solid var(--border); border-bottom: 1px solid var(--border);
@@ -97,7 +99,7 @@
   .cell-photo { width: 100%; height: 100%; object-fit: cover; position: absolute; inset: 0; }
   .cell-gradient { position: absolute; inset: 0; background: linear-gradient(to top, rgba(0,0,0,0.6) 0%, transparent 55%); pointer-events: none; }
   .cell-name { position: absolute; bottom: 3px; left: 0; right: 0; text-align: center; font-size: 8px; font-weight: 700; color: #fff; text-shadow: 0 1px 3px rgba(0,0,0,0.9); pointer-events: none; }
-  .cell-name-dark { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; font-size: 9px; font-weight: 700; color: var(--text); pointer-events: none; text-align: center; padding: 2px; }
+  .cell-name-dark { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 700; color: var(--text); pointer-events: none; text-align: center; padding: 2px; }
   .cell-border-overlay { position: absolute; inset: 0; border: 4px solid var(--claim-color, transparent); pointer-events: none; z-index: 2; }
   .mini-won-overlay { position: absolute; inset: 0; pointer-events: none; z-index: 10; display: flex; align-items: center; justify-content: center; font-family: 'Bebas Neue', sans-serif; letter-spacing: 1px; }
 
@@ -199,7 +201,7 @@
 <script>
 const ALL_CAST=["BENJI","BRANDON","CASEY","CHRIS","DREW","ERIN","GENKI","JACOB","JOHNNY","JULIA","RAYA","ROY","SHANNON","SIMONA","STEPH"];
 const CAST_PHOTOS={"BENJI":"","BRANDON":"","CASEY":"","CHRIS":"","DREW":"","ERIN":"","GENKI":"","JACOB":"","JOHNNY":"","JULIA":"","RAYA":"","ROY":"","SHANNON":"","SIMONA":"","STEPH":""};
-const COL_CATS=["INITIAL NOM AT LEAST ONCE","DID NOT WIN A POV","RECEIVED AT LEAST 1 VOTE TO EVICT","COMPETED IN 6+ PREJURY COMPS","NEVER WON CHALLENGES BACK-TO-BACK","NEVER A NOMINEE ON LIVE NIGHT","IN THE SAME HOUSE 3 CONSECUTIVE ROUNDS","NOMINATED AFTER WINNING HOH","CAST AN EVICTION VOTE 3 CONSECUTIVE ROUNDS"];
+const COL_CATS=["INITIAL NOM AT LEAST ONCE","DID NOT WIN A POV","RECEIVED AT LEAST 1 VOTE TO EVICT","COMPETED IN 6+ PREJURY COMPS","NEVER WON CHALLENGES BACK-TO-BACK","NEVER A NOMINEE ON LIVE NIGHT","IN THE SAME HOUSE 3 CONSECUTIVE ROUNDS","NOMINATED THE ROUND AFTER WINNING HOH","CAST AN EVICTION VOTE 3 CONSECUTIVE ROUNDS"];
 const ROW_CATS=["WON AT LEAST ONE CHALLENGE","TOP 3 ≥3 TIMES IN CHALLENGES","IN BOTH HOUSES ≥2 TIMES","COMPETED IN AT LEAST 1 LIVE NIGHT POV","SCORED ABOVE 0 IN TRAIN OF THOUGHT","NEVER A FINAL NOMINEE IN THE PREJURY","PLACED LAST IN AT LEAST 1 CHALLENGE","SECOND PLACE IN AT LEAST 1 CHALLENGE","RECEIVED AN EVEN NUMBER OF VOTES TO EVICT"];
 const VALID_ANSWERS=[[["BENJI","BRANDON","CHRIS","DREW","GENKI","JACOB","JOHNNY","RAYA","ROY","SIMONA","STEPH"],["BRANDON","CHRIS","JOHNNY","JULIA","RAYA","ROY","SIMONA","STEPH"],["BENJI","BRANDON","CHRIS","GENKI","JACOB","JOHNNY","JULIA","RAYA","ROY","STEPH"],["BENJI","CHRIS","DREW","GENKI","JACOB","JOHNNY","JULIA","RAYA","ROY","STEPH"],["BRANDON","CHRIS","JACOB","JOHNNY","JULIA","RAYA","ROY","SIMONA","STEPH"],["BENJI","BRANDON","CHRIS","JACOB","JULIA","SHANNON"],["BENJI","BRANDON","CHRIS","JACOB","JOHNNY","RAYA","ROY","SIMONA","STEPH"],["BENJI","BRANDON","CHRIS","JACOB","JOHNNY","RAYA","ROY","SIMONA","STEPH"],["BENJI","BRANDON","DREW","GENKI","JACOB","JOHNNY","RAYA","ROY","SIMONA","STEPH"]],[["BENJI","BRANDON","DREW","ERIN","GENKI","JACOB","JOHNNY","RAYA","SIMONA","STEPH"],["BRANDON","ERIN","JOHNNY","JULIA","RAYA","SIMONA","STEPH"],["BENJI","BRANDON","ERIN","GENKI","JACOB","JOHNNY","RAYA","SIMONA","STEPH"],["BENJI","DREW","GENKI","JACOB","JOHNNY","JULIA","RAYA","STEPH"],["BRANDON","ERIN","JACOB","JOHNNY","JULIA","RAYA","SIMONA","STEPH"],["BENJI","BRANDON","ERIN","JACOB","JULIA"],["BENJI","BRANDON","JACOB","JOHNNY","RAYA","SIMONA","STEPH"],["BENJI","BRANDON","DREW","GENKI","JOHNNY","RAYA","SIMONA","STEPH"],["BENJI","BRANDON","DREW","GENKI","JACOB","JOHNNY","RAYA","SIMONA","STEPH"]],[["BENJI","BRANDON","CHRIS","DREW","GENKI","JACOB","JOHNNY","SIMONA","STEPH"],["BRANDON","CHRIS","JOHNNY","JULIA","SHANNON","SIMONA","STEPH"],["BENJI","BRANDON","CHRIS","GENKI","JACOB","JOHNNY","JULIA","SHANNON","STEPH"],["BENJI","CHRIS","DREW","GENKI","JACOB","JOHNNY","JULIA","STEPH"],["BRANDON","CHRIS","JACOB","JOHNNY","JULIA","ROY","SIMONA","STEPH"],["BENJI","BRANDON","CHRIS","JACOB","JULIA"],["BENJI","BRANDON","CHRIS","JACOB","JOHNNY","RAYA","SIMONA"],["BENJI","BRANDON","DREW","GENKI","JOHNNY","SIMONA","STEPH"],["BENJI","BRANDON","DREW","GENKI","JACOB","SIMONA","STEPH"]],[["BENJI","BRANDON","DREW","GENKI","JACOB","JOHNNY","RAYA","ROY","SIMONA"],["BRANDON","JOHNNY","RAYA","ROY","SIMONA","STEPH"],["BENJI","BRANDON","GENKI","JACOB","JOHNNY","RAYA","ROY","STEPH"],["BENJI","DREW","GENKI","JACOB","JOHNNY","RAYA","ROY"],["BRANDON","ERIN","JACOB","JOHNNY","JULIA","ROY","SIMONA","STEPH"],["BENJI","BRANDON","JACOB","JOHNNY"],["BENJI","BRANDON","JACOB","JOHNNY","RAYA","SIMONA"],["BENJI","BRANDON","DREW","GENKI","RAYA","SIMONA"],["BENJI","BRANDON","DREW","GENKI","JACOB","SIMONA"]],[["BENJI","BRANDON","CASEY","DREW","ERIN","GENKI","JACOB","JOHNNY","ROY"],["BRANDON","CASEY","ERIN","JOHNNY","JULIA","ROY","SIMONA","STEPH"],["BENJI","BRANDON","CASEY","ERIN","GENKI","JACOB","JOHNNY","JULIA","ROY","SIMONA","STEPH"],["BENJI","DREW","GENKI","JACOB","JOHNNY","JULIA","ROY"],["BRANDON","CASEY","ERIN","JACOB","JOHNNY","JULIA","ROY","SIMONA","STEPH"],["BENJI","BRANDON","CASEY","JACOB","JULIA"],["BENJI","BRANDON","CASEY","JACOB","JOHNNY","ROY","SIMONA"],["BENJI","BRANDON","DREW","GENKI","ROY","SIMONA"],["BENJI","BRANDON","CASEY","DREW","GENKI","JACOB","SIMONA"]],[["BENJI","BRANDON","CASEY","DREW","JACOB","JOHNNY","RAYA","SIMONA","STEPH"],["BRANDON","CASEY","JOHNNY","JULIA","RAYA","SIMONA","STEPH"],["BENJI","BRANDON","CASEY","JACOB","JOHNNY","JULIA","RAYA","SIMONA","STEPH"],["BENJI","DREW","JACOB","JOHNNY","JULIA","RAYA"],["BRANDON","CASEY","JACOB","JOHNNY","JULIA","RAYA","SIMONA","STEPH"],["BENJI","BRANDON","CASEY","CHRIS","JACOB"],["BENJI","BRANDON","CASEY","JACOB","JOHNNY","RAYA","SIMONA"],["BENJI","BRANDON","DREW","RAYA","STEPH"],["BENJI","BRANDON","CASEY","DREW","JACOB","RAYA","STEPH"]],[["BENJI","BRANDON","CASEY","CHRIS","GENKI","JACOB","JOHNNY","RAYA","STEPH"],["BRANDON","CASEY","CHRIS","JOHNNY","RAYA","STEPH"],["BENJI","BRANDON","CASEY","CHRIS","GENKI","JACOB","JOHNNY","RAYA","STEPH"],["BENJI","CHRIS","GENKI","JACOB","JOHNNY","RAYA"],["BRANDON","CASEY","CHRIS","JACOB","JOHNNY","ROY","SIMONA","STEPH"],["BENJI","BRANDON","CASEY","CHRIS","JACOB"],["BENJI","BRANDON","CASEY","CHRIS","JACOB","JOHNNY","RAYA","SIMONA"],["BENJI","BRANDON","CASEY","GENKI","RAYA","SIMONA"],["BENJI","BRANDON","CASEY","GENKI","JACOB","SIMONA"]],[["BENJI","BRANDON","DREW","ERIN","GENKI","JOHNNY","RAYA","SIMONA"],["BRANDON","ERIN","JOHNNY","JULIA","RAYA","SIMONA","STEPH"],["BENJI","BRANDON","DREW","ERIN","GENKI","JOHNNY","JULIA","SIMONA","STEPH"],["BENJI","DREW","GENKI","JOHNNY","JULIA","RAYA"],["BRANDON","ERIN","JOHNNY","JULIA","RAYA","SIMONA","STEPH"],["BENJI","BRANDON","ERIN","JULIA"],["BENJI","BRANDON","JOHNNY","RAYA","SIMONA"],["BENJI","BRANDON","DREW","GENKI","SIMONA","STEPH"],["BENJI","BRANDON","DREW","GENKI","JOHNNY","RAYA","SIMONA","STEPH"]],[["BRANDON","CASEY","DREW","GENKI","JACOB","ROY","SIMONA","STEPH"],["BRANDON","CASEY","JULIA","ROY","SIMONA","STEPH"],["BRANDON","GENKI","JACOB","JULIA","ROY","STEPH"],["DREW","GENKI","JACOB","JULIA","ROY","STEPH"],["BRANDON","CASEY","JACOB","JULIA","ROY","SIMONA","STEPH"],["BRANDON","CASEY","JACOB","JULIA"],["BENJI","BRANDON","CASEY","GENKI","JACOB","SIMONA","STEPH"],["BENJI","BRANDON","DREW","GENKI","ROY","SIMONA","STEPH"],["BRANDON","CASEY","DREW","GENKI","JACOB","SIMONA","STEPH"]]];
 
