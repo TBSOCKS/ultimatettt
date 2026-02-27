@@ -506,7 +506,7 @@ cell.classList.add('claimed');cell.innerHTML='';cell.style.background='var(--cel
     if(winSet.has(`${i},${j}`)){
       cell.style.background=col;
       const n=document.createElement('div');
-      n.style.cssText=`position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-family:'Bebas Neue',sans-serif;font-size:11px;letter-spacing:1px;color:${tc};text-shadow:0 1px 3px rgba(0,0,0,0.2);text-align:center;padding:2px;`;
+      n.style.cssText=`position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-family:'Bebas Neue',sans-serif;font-size:13px;letter-spacing:1px;color:${tc};text-shadow:0 1px 3px rgba(0,0,0,0.2);text-align:center;padding:2px;`;
       n.textContent=players[p].name.toUpperCase();cell.appendChild(n);
     }
   }
