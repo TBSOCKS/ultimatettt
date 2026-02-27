@@ -98,7 +98,7 @@
   .mini-won-overlay { position: absolute; inset: 0; pointer-events: none; z-index: 10; display: flex; align-items: center; justify-content: center; font-family: 'Bebas Neue', sans-serif; letter-spacing: 1px; }
 
   /* ===== MODAL ===== */
-  #modal-overlay { display: none; position: fixed; inset: 0; background: rgba(10,20,40,0.55); z-index: 5000; align-items: center; justify-content: center; backdrop-filter: blur(4px); }
+  #modal-overlay { display: none; position: fixed; inset: 0; background: rgba(10,20,40,0.55); z-index: 500; align-items: center; justify-content: center; backdrop-filter: blur(4px); }
   #modal-overlay.open { display: flex; }
 #timer-float{
   position: fixed;
@@ -162,21 +162,6 @@
   .btn-submit:hover { background: #1a6dd1; }
   .btn-cancel { background: transparent; color: var(--muted); border: 1px solid var(--border); border-radius: 8px; padding: 9px; font-family: 'DM Sans', sans-serif; font-size: 13px; cursor: pointer; }
   .btn-cancel:hover { border-color: var(--accent); color: var(--accent); }
-
-.modal-timer {
-  display: flex;
-  justify-content: center;
-  margin-top: 6px;
-  padding: 10px 12px;
-  border: 1px solid var(--border);
-  border-radius: 999px;
-  background: rgba(255,255,255,0.95);
-  box-shadow: 0 8px 24px rgba(0,0,0,0.10);
-}
-.modal-timer .timer-display{
-  font-size: 36px;
-}
-
 .modal-correct {
   text-align: center;
   font-family: 'Bebas Neue', sans-serif;
@@ -434,20 +419,11 @@ async function handleTimesUp(){
 }
 
 function updateTimerDisplay(){
+  const d=document.getElementById('timer-display');
+  if(!d)return;
   const m=Math.floor(timerSeconds/60),s=timerSeconds%60;
-  const txt = `${m}:${s.toString().padStart(2,'0')}`;
-
-  const d1=document.getElementById('timer-display');        // floating
-  if(d1){
-    d1.textContent = txt;
-    d1.classList.toggle('warning', timerSeconds<=10);
-  }
-
-  const d2=document.getElementById('timer-display-modal');  // modal
-  if(d2){
-    d2.textContent = txt;
-    d2.classList.toggle('warning', timerSeconds<=10);
-  }
+  d.textContent=`${m}:${s.toString().padStart(2,'0')}`;
+  d.classList.toggle('warning',timerSeconds<=10);
 }
 
 function initState(){board=Array.from({length:9},()=>Array(9).fill(null));miniWon=Array.from({length:3},()=>Array(3).fill(null));currentPlayer=starterPlayer;scores=[0,0];forcedMacro=null;activeCell=null;wrongGuesses=Array.from({length:9},()=>Array.from({length:9},()=>new Set()));
@@ -528,36 +504,18 @@ document.getElementById('last-p2').textContent=lastGuessed[1]?`Last: ${lastGuess
 }
 
 function onCellClick(r,c){
-  if(!document.getElementById(`cell-${r}-${c}`).classList.contains('selectable')) return;
-
-  activeCell = { r, c };
-
+  if(!document.getElementById(`cell-${r}-${c}`).classList.contains('selectable'))return;
+  activeCell={r,c};
   document.getElementById('modal-inner').innerHTML=`
-  <div class="modal-title">Confirm Your Answer</div>
-
-  <div class="modal-timer">
-    <div class="timer-display" id="timer-display-modal">1:00</div>
-  </div>
-
-  <div class="modal-cats">
-    <div class="modal-cat"><span>Column</span>${COL_CATS[c]}</div>
-    <div class="modal-cat"><span>Row</span>${ROW_CATS[r]}</div>
-  </div>
-
-  <div style="text-align:center;padding:8px 0;font-family:'Bebas Neue',sans-serif;font-size:22px;letter-spacing:2px;color:${players[currentPlayer].color}">
-    ${name}
-  </div>
-
-  <div class="modal-btns">
-    <button class="btn-submit" onclick="confirmAnswer('${name}')">CONFIRM</button>
-    <button class="btn-cancel" onclick="reopenGuess(${r},${c})">← CHANGE ANSWER</button>
-  </div>
-`;
-updateTimerDisplay();
-
+    <div class="modal-title">Make Your Guess</div>
+    <div class="modal-cats"><div class="modal-cat"><span>Column</span>${COL_CATS[c]}</div><div class="modal-cat"><span>Row</span>${ROW_CATS[r]}</div></div>
+    <div><div class="modal-label">Cast Members</div><div class="cast-roster" id="cast-roster"></div></div>
+    <div><div class="modal-label">Select a Cast Member</div><select class="answer-select" id="answer-select"><option value="">— choose —</option></select></div>
+    <div class="modal-btns"><button class="btn-submit" onclick="submitAnswer()">SUBMIT ANSWER</button><button class="btn-cancel" onclick="closeModal()">Cancel</button></div>
+  `;
   refreshCastList(r,c);
   document.getElementById('modal-overlay').classList.add('open');
-  document.body.classList.add('modal-open');
+document.body.classList.add('modal-open');
 }
 
 function refreshCastList(r,c){
