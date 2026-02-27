@@ -172,7 +172,8 @@
     <div class="player-badge" id="badge-p1">
       <div class="badge-dot" id="dot-p1" style="background:#e85d5d"></div>
       <div class="badge-name" id="name-p1">Player 1</div>
-      <div class="badge-score">🏆 <span id="score-p1">0</span> / 3</div>
+<div class="badge-last" id="last-p1" style="font-size:10px;color:var(--muted);letter-spacing:0.5px;min-height:14px;"></div>
+<div class="badge-score">🏆 <span id="score-p1">0</span> / 3</div>
     </div>
     <div style="text-align:center;display:flex;flex-direction:column;align-items:center;gap:6px;">
   <div class="turn-indicator">Current Turn<span class="turn-name" id="turn-display" style="color:var(--accent)">—</span></div>
@@ -181,7 +182,8 @@
     <div class="player-badge" id="badge-p2">
       <div class="badge-dot" id="dot-p2" style="background:#4caf50"></div>
       <div class="badge-name" id="name-p2">Player 2</div>
-      <div class="badge-score">🏆 <span id="score-p2">0</span> / 3</div>
+<div class="badge-last" id="last-p2" style="font-size:10px;color:var(--muted);letter-spacing:0.5px;min-height:14px;"></div>
+<div class="badge-score">🏆 <span id="score-p2">0</span> / 3</div>
     </div>
   </div>
   <div class="grid-wrapper">
@@ -254,7 +256,9 @@ function updateUI(){
   document.getElementById('badge-p1').classList.toggle('active',currentPlayer===0);
   document.getElementById('badge-p2').classList.toggle('active',currentPlayer===1);
   document.getElementById('score-p1').textContent=scores[0];
-  document.getElementById('score-p2').textContent=scores[1];
+document.getElementById('score-p2').textContent=scores[1];
+document.getElementById('last-p1').textContent=lastGuessed[0]?`Last: ${lastGuessed[0]}`:'';
+document.getElementById('last-p2').textContent=lastGuessed[1]?`Last: ${lastGuessed[1]}`:'';
   for(let r=0;r<9;r++)for(let c=0;c<9;c++){
     const cell=document.getElementById(`cell-${r}-${c}`);cell.classList.remove('selectable','locked');
     const mr=Math.floor(r/3),mc=Math.floor(c/3);
