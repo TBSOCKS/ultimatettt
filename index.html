@@ -233,8 +233,14 @@ function handleTimesUp(){
 
 function setStarter(p){
   starterPlayer=p;
-  document.getElementById('starter-p1').className='starter-btn'+(p===0?' active-p1':'');
-  document.getElementById('starter-p2').className='starter-btn'+(p===1?' active-p2':'');
+  const b1=document.getElementById('starter-p1');
+  const b2=document.getElementById('starter-p2');
+  b1.className='starter-btn'+(p===0?' active-p1':'');
+  b2.className='starter-btn'+(p===1?' active-p2':'');
+  const c1=document.getElementById('p1-color').value||'#e85d5d';
+  const c2=document.getElementById('p2-color').value||'#4caf50';
+  b1.style.color=p===0?getLabelColor(c1):'var(--muted)';
+  b2.style.color=p===1?getLabelColor(c2):'var(--muted)';
 }
 
 function toggleTimer(){
