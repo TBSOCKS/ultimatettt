@@ -88,8 +88,10 @@
   .answer-select:focus { outline: none; border-color: var(--accent); }
   .answer-select option { background: #fff; color: var(--text); }
   .cast-roster { display: flex; flex-wrap: wrap; gap: 5px; }
-  .cast-tag { padding: 4px 9px; border-radius: 20px; font-size: 10px; font-weight: 600; background: #eaf2ff; border: 1px solid #c0d8f0; color: var(--text); white-space: nowrap; }
-  .cast-tag.strikeout { text-decoration: line-through; opacity: 0.38; color: var(--muted); }
+  .cast-tag { padding: 4px 9px; border-radius: 20px; font-size: 10px; font-weight: 600; background: #eaf2ff; border: 1px solid #c0d8f0; color: var(--text); white-space: nowrap; cursor: pointer; transition: all 0.12s; }
+  .cast-tag:hover:not(.strikeout) { background: #d0e8ff; border-color: var(--accent); }
+  .cast-tag.selected { background: var(--accent); border-color: var(--accent); color: #fff; }
+  .cast-tag.strikeout { text-decoration: line-through; opacity: 0.38; color: var(--muted); cursor: default; }
   .modal-btns { display: flex; flex-direction: column; gap: 8px; }
   .btn-submit { background: var(--accent); color: #fff; border: none; border-radius: 8px; padding: 13px; font-family: 'Bebas Neue', sans-serif; font-size: 20px; letter-spacing: 2px; cursor: pointer; transition: background 0.15s; }
   .btn-submit:hover { background: #1a6dd1; }
@@ -385,8 +387,7 @@ function onCellClick(r,c){
   document.getElementById('modal-inner').innerHTML=`
     <div class="modal-title">Make Your Guess</div>
     <div class="modal-cats"><div class="modal-cat"><span>Column</span>${COL_CATS[c]}</div><div class="modal-cat"><span>Row</span>${ROW_CATS[r]}</div></div>
-    <div><div class="modal-label">Cast Members</div><div class="cast-roster" id="cast-roster"></div></div>
-    <div><div class="modal-label">Select a Cast Member</div><select class="answer-select" id="answer-select"><option value="">— choose —</option></select></div>
+    <div><div class="modal-label">Select a Cast Member</div><div class="cast-roster" id="cast-roster"></div></div>
     <div class="modal-btns"><button class="btn-submit" onclick="submitAnswer()">SUBMIT ANSWER</button><button class="btn-cancel" onclick="closeModal()">Cancel</button></div>
   `;
   refreshCastList(r,c);
@@ -396,19 +397,30 @@ function onCellClick(r,c){
 function refreshCastList(r,c){
   const mr=Math.floor(r/3),mc=Math.floor(c/3),used={};
   for(let i=0;i<3;i++)for(let j=0;j<3;j++){const d=board[mr*3+i][mc*3+j];if(d)used[d.name]=(used[d.name]||0)+1;}
-  const roster=document.getElementById('cast-roster'),sel=document.getElementById('answer-select');
-  if(!roster||!sel)return;
-  roster.innerHTML='';sel.innerHTML='<option value="">— choose —</option>';
+  const roster=document.getElementById('cast-roster');
+  if(!roster)return;
+  roster.innerHTML='';
   ALL_CAST.forEach(n=>{
     const struck=wrongGuesses[r][c].has(n)||(used[n]||0)>=2||n===lastGuessed[currentPlayer];
-    const t=document.createElement('div');t.className='cast-tag'+(struck?' strikeout':'');t.textContent=n;roster.appendChild(t);
-    if(!struck){const o=document.createElement('option');o.value=n;o.textContent=n;sel.appendChild(o);}
+    const t=document.createElement('div');
+    t.className='cast-tag'+(struck?' strikeout':'');
+    t.textContent=n;
+    t.dataset.name=n;
+    if(!struck){
+      t.addEventListener('click',()=>{
+        document.querySelectorAll('.cast-tag.selected').forEach(el=>el.classList.remove('selected'));
+        t.classList.add('selected');
+      });
+    }
+    roster.appendChild(t);
   });
 }
 
 function submitAnswer(){
   if(!activeCell)return;
-  const{r,c}=activeCell,sel=document.getElementById('answer-select'),name=sel?sel.value:'';
+  const{r,c}=activeCell;
+  const selected=document.querySelector('.cast-tag.selected');
+  const name=selected?selected.dataset.name:'';
   if(!name)return;
   document.getElementById('modal-inner').innerHTML=`
     <div class="modal-title">Confirm Your Answer</div>
@@ -443,8 +455,7 @@ function reopenGuess(r,c){
   document.getElementById('modal-inner').innerHTML=`
     <div class="modal-title">Make Your Guess</div>
     <div class="modal-cats"><div class="modal-cat"><span>Column</span>${COL_CATS[c]}</div><div class="modal-cat"><span>Row</span>${ROW_CATS[r]}</div></div>
-    <div><div class="modal-label">Cast Members</div><div class="cast-roster" id="cast-roster"></div></div>
-    <div><div class="modal-label">Select a Cast Member</div><select class="answer-select" id="answer-select"><option value="">— choose —</option></select></div>
+    <div><div class="modal-label">Select a Cast Member</div><div class="cast-roster" id="cast-roster"></div></div>
     <div class="modal-btns"><button class="btn-submit" onclick="submitAnswer()">SUBMIT ANSWER</button><button class="btn-cancel" onclick="closeModal()">Cancel</button></div>
   `;
   refreshCastList(r,c);
