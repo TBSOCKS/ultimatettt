@@ -418,43 +418,24 @@ function setTimerToFull(){
 async function handleTimesUp(){
   const modalOpen = document.getElementById('modal-overlay').classList.contains('open');
 
-  // stop the current interval (it should already be stopped where you call handleTimesUp,
-  // but this keeps it bulletproof)
+  // hard stop any running timer
   clearInterval(timerInterval);
   timerInterval = null;
+  timerRunning = false;
 
-  // If a modal is open, flash + close it BEFORE switching turn
-  if(modalOpen){
-    await showTimesUpFlash();
-    closeModal();
-  } else {
-    // still flash even if modal isn't open (optional; remove if you only want it when modal is open)
-    await showTimesUpFlash();
-  }
+  // flash + close modal if needed
+  await showTimesUpFlash();
+  if(modalOpen) closeModal();
 
   // Switch turn + clear restrictions for the player who timed out
   forcedMacro = null;
   lastGuessed[currentPlayer] = null;
   currentPlayer = 1 - currentPlayer;
 
-    // Reset the timer to full
-  resetTimer();          // clears any interval + sets to 60 + UI
+  // Reset timer to full and start immediately
+  resetTimer();   // sets 60 and updates UI
   updateUI();
-
-  // IMPORTANT: keep the timer running automatically ONLY because time expired
-  toggleTimer();         // starts a fresh interval cleanly
-  return;                // prevents duplicate logic below
-    timerSeconds--;
-    updateTimerDisplay();
-    if(timerSeconds <= 0){
-      clearInterval(timerInterval);
-      timerInterval = null;
-      timerRunning = false;
-      document.getElementById('timer-toggle-btn').textContent = '▶';
-      document.getElementById('timer-toggle-btn').classList.remove('running');
-      handleTimesUp();
-    }
-  }, 1000);
+  toggleTimer();  // starts countdown
 }
 
 function updateTimerDisplay(){
