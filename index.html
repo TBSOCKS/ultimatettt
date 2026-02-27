@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>BBH22 — Ultimate Tic Tac Trivia (Sandbox)</title>
+<title>BBH22 — Ultimate Tic Tac Trivia</title>
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
   :root {
@@ -221,20 +221,10 @@
 </head>
 <body style="display:flex;flex-direction:column;min-height:100vh;">
 
-<!-- Sandbox banner -->
-<div class="sandbox-banner">
-  <div>
-    <div class="sandbox-label">⚠ Sandbox Mode</div>
-    <div class="sandbox-note">For testing only — not the live competition</div>
-  </div>
-  <button class="reset-btn" onclick="confirmReset()">↺ RESET TO SETUP</button>
-</div>
-
 <!-- ========== SETUP ========== -->
 <div id="setup-screen">
   <div class="setup-title">Ultimate Tic Tac Trivia</div>
   <div class="setup-subtitle">BBH22 · Season Trivia</div>
-  <div class="sandbox-badge">SANDBOX</div>
   <div class="setup-card">
     <div class="players-row">
       <div class="player-setup">
@@ -261,8 +251,8 @@
         <button class="starter-btn" id="starter-p2" onclick="setStarter(1)">Player 2 Goes First</button>
       </div>
     </div>
-    <button class="start-btn" onclick="startGame()">START SANDBOX</button>
-    <a href="/index.html" style="text-align:center;color:var(--muted);font-family:'DM Sans',sans-serif;font-size:13px;text-decoration:none;letter-spacing:1px;">← Go to Main Game</a>
+    <button class="start-btn" onclick="startGame()">START CHALLENGE</button>
+    <a href="/test.html" style="text-align:center;color:var(--muted);font-family:'DM Sans',sans-serif;font-size:13px;text-decoration:none;letter-spacing:1px;">← Go to Sandbox</a>
     <a href="/example.html" style="text-align:center;color:var(--muted);font-family:'DM Sans',sans-serif;font-size:13px;text-decoration:none;letter-spacing:1px;">Go to Example →</a>
   </div>
 </div>
@@ -292,7 +282,7 @@
   <button class="timer-btn" onclick="resetTimer()">↺ RESET</button>
 </div>
   <button class="header-reset" onclick="confirmReset()">↺ RESET</button>
-  <a href="/index.html" style="background:transparent;border:1px solid var(--border);color:var(--muted);border-radius:6px;padding:5px 14px;font-family:'Bebas Neue',sans-serif;font-size:13px;letter-spacing:2px;text-decoration:none;">← MAIN GAME</a>
+  <a href="/test.html" style="background:transparent;border:1px solid var(--border);color:var(--muted);border-radius:6px;padding:5px 14px;font-family:'Bebas Neue',sans-serif;font-size:13px;letter-spacing:2px;text-decoration:none;">← SANDBOX</a>
 </div>
     <div class="player-badge" id="badge-p2">
       <div class="badge-dot" id="dot-p2" style="background:#4caf50"></div>
