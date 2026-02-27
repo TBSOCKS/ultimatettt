@@ -72,7 +72,7 @@
   .cell-gradient { position: absolute; inset: 0; background: linear-gradient(to top,rgba(0,0,0,0.6) 0%,transparent 55%); pointer-events: none; }
   .cell-name { position: absolute; bottom: 3px; left: 0; right: 0; text-align: center; font-size: 8px; font-weight: 700; color: #fff; text-shadow: 0 1px 3px rgba(0,0,0,0.9); pointer-events: none; }
   .cell-name-dark { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 700; color: var(--text); pointer-events: none; text-align: center; padding: 2px; }
-  .cell-border-overlay { position: absolute; inset: 0; border: 4px solid var(--claim-color,transparent); pointer-events: none; z-index: 2; }
+  .cell-border-overlay { position: absolute; inset: 0; border: 4px solid var(--claim-color,transparent); pointer-events: none; z-index: 2; }   .cell-coord { position: absolute; top: 3px; left: 5px; font-size: 9px; font-weight: 700; color: var(--muted); opacity: 0.5; pointer-events: none; line-height: 1; }
 
   /* ===== MODAL ===== */
   #modal-overlay { display: none; position: fixed; inset: 0; background: rgba(10,20,40,0.55); z-index: 100; align-items: center; justify-content: center; backdrop-filter: blur(4px); padding-top: 80px; align-items: flex-start; }
@@ -259,7 +259,6 @@ function toggleTimer(){
   } else {
     document.getElementById('paused-overlay').style.display='none';
     timerRunning=true;
-    timerRunning=true;
     document.getElementById('timer-toggle-btn').textContent='⏸ STOP';
     document.getElementById('timer-toggle-btn').classList.add('running');
     timerInterval=setInterval(()=>{
@@ -365,7 +364,7 @@ function buildGrid(){
   for(let r=0;r<9;r++){
     const gr2=grow(r);
     const rh=document.createElement('div');rh.className='row-header';rh.style.cssText=`grid-column:1;grid-row:${gr2};`;rh.textContent=ROW_CATS[r];g.appendChild(rh);
-    for(let c=0;c<9;c++){const cell=document.createElement('div');cell.className='grid-cell';cell.id=`cell-${r}-${c}`;cell.style.cssText=`grid-column:${gcol(c)};grid-row:${gr2};`;cell.addEventListener('click',()=>onCellClick(r,c));g.appendChild(cell);}
+    for(let c=0;c<9;c++){const cell=document.createElement('div');cell.className='grid-cell';cell.id=`cell-${r}-${c}`;cell.style.cssText=`grid-column:${gcol(c)};grid-row:${gr2};`;const coord=document.createElement('div');coord.className='cell-coord';coord.textContent=`${r+1}-${c+1}`;cell.appendChild(coord);cell.addEventListener('click',()=>onCellClick(r,c));g.appendChild(cell);}
   }
 }
 
