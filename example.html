@@ -410,6 +410,8 @@ if(won){
 }else{
   forcedMacro=(miniWon[nm][nc]!==null||isMiniGridFull(nm,nc))?null:{mr:nm,mc:nc};
 }
+  currentPlayer=1-currentPlayer;closeModal();updateUI();
+}
 
 function closeModal(){document.getElementById('modal-overlay').classList.remove('open');activeCell=null;}
 
