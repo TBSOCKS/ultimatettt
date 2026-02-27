@@ -172,9 +172,39 @@
   .btn-submit:hover { background: #1a6dd1; }
   .btn-cancel { background: transparent; color: var(--muted); border: 1px solid var(--border); border-radius: 8px; padding: 9px; font-family: 'DM Sans', sans-serif; font-size: 13px; cursor: pointer; }
   .btn-cancel:hover { border-color: var(--accent); color: var(--accent); }
-  .modal-correct { text-align: center; font-family: 'Bebas Neue', sans-serif; font-size: 56px; letter-spacing: 4px; padding: 24px 0; animation: correct-pop 0.35s ease; }
-  @keyframes correct-pop { 0% { transform: scale(0.6); opacity: 0; } 70% { transform: scale(1.1); } 100% { transform: scale(1); opacity: 1; } }
+.modal-correct {
+  text-align: center;
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 56px;
+  letter-spacing: 4px;
+  padding: 24px 0;
+  animation: correct-pop 0.35s ease;
+}
+@keyframes correct-pop {
+  0% { transform: scale(0.6); opacity: 0; }
+  70% { transform: scale(1.1); }
+  100% { transform: scale(1); opacity: 1; }
+}
 
+/* ===== TIME'S UP OVERLAY ===== */
+#timesup-overlay{
+  display:none;
+  position:fixed;
+  inset:0;
+  z-index:999;
+  background:rgba(10,20,40,0.68);
+  align-items:center;
+  justify-content:center;
+  backdrop-filter: blur(3px);
+}
+#timesup-overlay.open{ display:flex; }
+#timesup-overlay .timesup-text{
+  font-family:'Bebas Neue', sans-serif;
+  font-size:64px;
+  letter-spacing:6px;
+  color:#fff;
+  text-shadow:0 8px 32px rgba(0,0,0,0.45);
+}
   /* ===== WIN ===== */
   #win-screen { display: none; position: fixed; inset: 0; background: rgba(240,244,248,0.96); z-index: 200; align-items: center; justify-content: center; flex-direction: column; gap: 16px; text-align: center; }
   #win-screen.open { display: flex; }
@@ -259,7 +289,7 @@
     <div style="text-align:center;display:flex;flex-direction:column;align-items:center;gap:6px;">
   <div class="turn-indicator">Current Turn<span class="turn-name" id="turn-display" style="color:var(--accent)">—</span></div>
   <div id="timer-float">
-  <div class="timer-display" id="timer-display">0:30</div>
+  <div class="timer-display" id="timer-display">1:00</div>
 
   <!-- floating pause/start button -->
   <button class="timer-float-btn" id="timer-toggle-btn" onclick="toggleTimer()" title="Start / Pause">
@@ -315,6 +345,10 @@
   </div>
 </div>
 
+<div id="timesup-overlay">
+  <div class="timesup-text">TIME’S UP!</div>
+</div>
+
 <script>
 const ALL_CAST=["BENJI","BRANDON","CASEY","CHRIS","DREW","ERIN","GENKI","JACOB","JOHNNY","JULIA","RAYA","ROY","SHANNON","SIMONA","STEPH"];
 const CAST_PHOTOS={"BENJI":"","BRANDON":"","CASEY":"","CHRIS":"","DREW":"","ERIN":"","GENKI":"","JACOB":"","JOHNNY":"","JULIA":"","RAYA":"","ROY":"","SHANNON":"","SIMONA":"","STEPH":""};
@@ -325,7 +359,7 @@ const VALID_ANSWERS=[[["BENJI","BRANDON","CHRIS","DREW","GENKI","JACOB","JOHNNY"
 let players=[{name:"Player 1",color:"#e85d5d"},{name:"Player 2",color:"#4caf50"}];
 let board,miniWon,currentPlayer,scores,forcedMacro,activeCell,wrongGuesses,lastGuessed;
 let starterPlayer=0;
-let timerSeconds=30,timerInterval=null,timerRunning=false;
+let timerSeconds=60,timerInterval=null,timerRunning=false;
 
 function setStarter(p){
   starterPlayer=p;
@@ -345,16 +379,86 @@ function toggleTimer(){
     timerInterval=setInterval(()=>{
       timerSeconds--;
       updateTimerDisplay();
-      if(timerSeconds<=0){clearInterval(timerInterval);timerInterval=null;timerRunning=false;document.getElementById('timer-toggle-btn').textContent='▶';document.getElementById('timer-toggle-btn').classList.remove('running');}
+      if(timerSeconds<=0){
+  clearInterval(timerInterval);timerInterval=null;timerRunning=false;
+  document.getElementById('timer-toggle-btn').textContent='▶';
+  document.getElementById('timer-toggle-btn').classList.remove('running');
+  handleTimesUp();
+}
     },1000);
   }
 }
 
 function resetTimer(){
   clearInterval(timerInterval); timerInterval=null; timerRunning=false;
-  timerSeconds=30; updateTimerDisplay();
+  timerSeconds=60; updateTimerDisplay();
   document.getElementById('timer-toggle-btn').textContent='▶';
   document.getElementById('timer-toggle-btn').classList.remove('running');
+}
+
+function showTimesUpFlash(){
+  const o=document.getElementById('timesup-overlay');
+  if(!o) return Promise.resolve();
+  o.classList.add('open');
+  return new Promise(res=>{
+    setTimeout(()=>{
+      o.classList.remove('open');
+      res();
+    },700);
+  });
+}
+
+// Resets to full time but does NOT auto-start unless told to
+function setTimerToFull(){
+  timerSeconds=60;
+  updateTimerDisplay();
+}
+
+// Used when time expires and no guess was confirmed/committed.
+async function handleTimesUp(){
+  const modalOpen = document.getElementById('modal-overlay').classList.contains('open');
+
+  // stop the current interval (it should already be stopped where you call handleTimesUp,
+  // but this keeps it bulletproof)
+  clearInterval(timerInterval);
+  timerInterval = null;
+
+  // If a modal is open, flash + close it BEFORE switching turn
+  if(modalOpen){
+    await showTimesUpFlash();
+    closeModal();
+  } else {
+    // still flash even if modal isn't open (optional; remove if you only want it when modal is open)
+    await showTimesUpFlash();
+  }
+
+  // Switch turn + clear restrictions for the player who timed out
+  forcedMacro = null;
+  lastGuessed[currentPlayer] = null;
+  currentPlayer = 1 - currentPlayer;
+
+  // Reset the timer to full
+  timerSeconds = 60;
+  updateTimerDisplay();
+  updateUI();
+
+  // IMPORTANT: keep the timer running automatically ONLY because time expired
+  timerRunning = true;
+  document.getElementById('timer-toggle-btn').textContent = '⏸';
+  document.getElementById('timer-toggle-btn').classList.add('running');
+
+  timerInterval = setInterval(()=>{
+    timerSeconds--;
+    updateTimerDisplay();
+    if(timerSeconds <= 0){
+      clearInterval(timerInterval);
+      timerInterval = null;
+      timerRunning = false;
+      document.getElementById('timer-toggle-btn').textContent = '▶';
+      document.getElementById('timer-toggle-btn').classList.remove('running');
+      handleTimesUp();
+    }
+  }, 1000);
 }
 
 function updateTimerDisplay(){
