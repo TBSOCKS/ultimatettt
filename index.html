@@ -311,8 +311,8 @@ function updateStarterLabels(){
   b2.textContent=n2+' Goes First';
   document.documentElement.style.setProperty('--p1',c1);
   document.documentElement.style.setProperty('--p2',c2);
-  document.getElementById('starter-p1').style.color=getLabelColor(c1);
-  document.getElementById('starter-p2').style.color=getLabelColor(c2);
+  document.getElementById('starter-p1').style.color=starterPlayer===0?getLabelColor(c1):'var(--muted)';
+  document.getElementById('starter-p2').style.color=starterPlayer===1?getLabelColor(c2):'var(--muted)';
 }
 const p1pick=document.getElementById('p1-color-picker');
 const p1text=document.getElementById('p1-color');
