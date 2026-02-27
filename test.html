@@ -191,7 +191,7 @@
   display:none;
   position:fixed;
   inset:0;
-  z-index:999;
+  z-index:2000;
   background:rgba(10,20,40,0.68);
   align-items:center;
   justify-content:center;
@@ -437,17 +437,13 @@ async function handleTimesUp(){
   lastGuessed[currentPlayer] = null;
   currentPlayer = 1 - currentPlayer;
 
-  // Reset the timer to full
-  timerSeconds = 60;
-  updateTimerDisplay();
+    // Reset the timer to full
+  resetTimer();          // clears any interval + sets to 60 + UI
   updateUI();
 
   // IMPORTANT: keep the timer running automatically ONLY because time expired
-  timerRunning = true;
-  document.getElementById('timer-toggle-btn').textContent = '⏸';
-  document.getElementById('timer-toggle-btn').classList.add('running');
-
-  timerInterval = setInterval(()=>{
+  toggleTimer();         // starts a fresh interval cleanly
+  return;                // prevents duplicate logic below
     timerSeconds--;
     updateTimerDisplay();
     if(timerSeconds <= 0){
@@ -598,11 +594,22 @@ function confirmAnswer(name){
   if(VALID_ANSWERS[r][c].includes(name)){
     document.getElementById('modal-inner').innerHTML=`<div class="modal-correct" style="color:${players[currentPlayer].color}">CORRECT!</div>`;
     setTimeout(()=>commitCorrect(r,c,name),900);
-  } else {
+    } else {
     wrongGuesses[r][c].add(name);
     document.getElementById('modal-inner').innerHTML=`<div class="modal-correct" style="color:#e85d5d">INCORRECT!</div>`;
     setTimeout(()=>{
-      forcedMacro=null; lastGuessed[currentPlayer]=null; currentPlayer=1-currentPlayer; closeModal(); updateUI();
+      forcedMacro = null;
+      lastGuessed[currentPlayer] = null;
+
+      // switch turn
+      currentPlayer = 1 - currentPlayer;
+
+      // reset timer + start it (same as correct)
+      resetTimer();
+      toggleTimer();
+
+      closeModal();
+      updateUI();
     }, 900);
   }
 }
