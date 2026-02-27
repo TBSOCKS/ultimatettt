@@ -75,7 +75,7 @@
   .cell-border-overlay { position: absolute; inset: 0; border: 4px solid var(--claim-color,transparent); pointer-events: none; z-index: 2; }
 
   /* ===== MODAL ===== */
-  #modal-overlay { display: none; position: fixed; inset: 0; background: rgba(10,20,40,0.55); z-index: 100; align-items: center; justify-content: center; backdrop-filter: blur(4px); }
+  #modal-overlay { display: none; position: fixed; inset: 0; background: rgba(10,20,40,0.55); z-index: 100; align-items: center; justify-content: center; backdrop-filter: blur(4px); padding-top: 80px; align-items: flex-start; }
   #modal-overlay.open { display: flex; }
   .modal { background: #fff; border: 1px solid var(--border); border-radius: 16px; padding: 24px; width: 92%; max-width: 460px; display: flex; flex-direction: column; gap: 15px; animation: modal-in 0.2s ease; max-height: 90vh; overflow-y: auto; box-shadow: 0 8px 40px rgba(42,125,225,0.18); }
   @keyframes modal-in { from { transform: translateY(12px) scale(0.97); opacity: 0; } to { transform: none; opacity: 1; } }
@@ -155,7 +155,7 @@
     </div>
     <div style="text-align:center;display:flex;flex-direction:column;align-items:center;gap:6px;">
       <div class="turn-indicator">Current Turn<span class="turn-name" id="turn-display" style="color:var(--accent)">—</span></div>
-      <div class="timer-display" id="timer-display">0:30</div>
+      <div class="timer-display" id="timer-display">1:00</div>
       <div class="timer-controls">
         <button class="timer-btn" id="timer-toggle-btn" onclick="toggleTimer()">▶ START</button>
         <button class="timer-btn" onclick="resetTimer()">↺ RESET</button>
@@ -180,6 +180,11 @@
   </div>
 </div>
 
+<!-- ========== TIMES UP ========== -->
+<div id="timesup-overlay" style="display:none;position:fixed;inset:0;z-index:500;background:rgba(10,20,40,0.7);align-items:center;justify-content:center;backdrop-filter:blur(3px);">
+  <div style="font-family:'Bebas Neue',sans-serif;font-size:72px;letter-spacing:8px;color:#fff;text-shadow:0 8px 32px rgba(0,0,0,0.5);animation:correct-pop 0.35s ease;">TIME'S UP!</div>
+</div>
+
 <!-- ========== WIN ========== -->
 <div id="win-screen">
   <div class="win-title" id="win-name">PLAYER 1</div>
@@ -193,21 +198,33 @@ const CAST_PHOTOS={"BENJI":"","BRANDON":"","CASEY":"","CHRIS":"","DREW":"","ERIN
 const COL_CATS=["INITIAL NOM AT LEAST ONCE","DID NOT WIN A POV","RECEIVED AT LEAST 1 VOTE TO EVICT","COMPETED IN 6+ PREJURY COMPS","NEVER WON CHALLENGES IN B2B ROUNDS","NEVER A NOMINEE DURING A LIVE EVENT","IN THE SAME HOUSE 3 CONSECUTIVE ROUNDS","NOMINATED THE ROUND AFTER WINNING HOH","CAST AN EVICTION VOTE 3 CONSECUTIVE ROUNDS"];
 const ROW_CATS=["WON AT LEAST ONE CHALLENGE","TOP 3 3+ TIMES IN CHALLENGES","IN BOTH HOUSES 2+ TIMES","COMPETED IN AT LEAST 1 LIVE EVENT POV","SCORED ABOVE 0 IN TRAIN OF THOUGHT","NEVER A FINAL NOMINEE IN THE PREJURY","PLACED LAST IN AT LEAST 1 CHALLENGE","SECOND PLACE IN AT LEAST 1 CHALLENGE","RECEIVED AN EVEN NUMBER OF VOTES TO EVICT"];
 const VALID_ANSWERS=[
-[["BENJI","BRANDON","CHRIS","DREW","GENKI","JACOB","JOHNNY","RAYA","ROY","SIMONA","STEPH"],["BRANDON","CHRIS","JOHNNY","JULIA","RAYA","ROY","SIMONA","STEPH"],["BENJI","BRANDON","CHRIS","GENKI","JACOB","JOHNNY","JULIA","RAYA","ROY","STEPH"],["BENJI","CHRIS","DREW","GENKI","JACOB","JOHNNY","JULIA","RAYA","ROY","STEPH"],["BRANDON","CHRIS","JACOB","JOHNNY","JULIA","RAYA","ROY","SIMONA","STEPH"],["BENJI","BRANDON","CHRIS","JACOB","JULIA","SHANNON"],["BENJI","BRANDON","CHRIS","JACOB","JOHNNY","RAYA","ROY","SIMONA","STEPH"],["BENJI","CHRIS","DREW","GENKI","RAYA","ROY","STEPH"],["BENJI","BRANDON","DREW","GENKI","JACOB","JOHNNY","RAYA","SIMONA","STEPH"]],
-[["BENJI","BRANDON","DREW","ERIN","GENKI","JACOB","JOHNNY","RAYA","SIMONA"],["BRANDON","ERIN","JOHNNY","JULIA","RAYA","SIMONA"],["BENJI","BRANDON","ERIN","GENKI","JACOB","JOHNNY","JULIA","RAYA"],["BENJI","DREW","GENKI","JACOB","JOHNNY","JULIA","RAYA"],["BRANDON","ERIN","JACOB","JOHNNY","JULIA","RAYA","SIMONA"],["BENJI","BRANDON","ERIN","JACOB","JULIA"],["BENJI","BRANDON","JACOB","JOHNNY","RAYA","SIMONA"],["BENJI","DREW","GENKI","RAYA"],["BENJI","BRANDON","DREW","GENKI","JACOB","JOHNNY","RAYA","SIMONA"]],
-[["BENJI","BRANDON","CHRIS","DREW","GENKI","JACOB","JOHNNY","SIMONA","STEPH"],["BRANDON","CHRIS","JOHNNY","JULIA","SHANNON","SIMONA","STEPH"],["BENJI","BRANDON","CHRIS","GENKI","JACOB","JOHNNY","JULIA","SHANNON","STEPH"],["BENJI","CHRIS","DREW","GENKI","JACOB","JOHNNY","JULIA","STEPH"],["BRANDON","CHRIS","JACOB","JOHNNY","JULIA","SHANNON","SIMONA","STEPH"],["BENJI","BRANDON","CHRIS","JACOB","JULIA","SHANNON"],["BENJI","BRANDON","CHRIS","JACOB","JOHNNY","SIMONA","STEPH"],["BENJI","CHRIS","DREW","GENKI","STEPH"],["BENJI","BRANDON","DREW","GENKI","JACOB","JOHNNY","SIMONA","STEPH"]],
-[["BENJI","BRANDON","DREW","GENKI","JACOB","JOHNNY","RAYA","ROY","SIMONA","STEPH"],["BRANDON","JOHNNY","RAYA","ROY","SIMONA","STEPH"],["BENJI","BRANDON","GENKI","JACOB","JOHNNY","RAYA","ROY","STEPH"],["BENJI","DREW","GENKI","JACOB","JOHNNY","RAYA","ROY","STEPH"],["BRANDON","JACOB","JOHNNY","RAYA","ROY","SIMONA","STEPH"],["BENJI","BRANDON","JACOB"],["BENJI","BRANDON","JACOB","JOHNNY","RAYA","ROY","SIMONA","STEPH"],["BENJI","DREW","GENKI","RAYA","ROY","STEPH"],["BENJI","BRANDON","DREW","GENKI","JACOB","JOHNNY","RAYA","SIMONA","STEPH"]],
-[["BENJI","BRANDON","CASEY","DREW","ERIN","GENKI","JACOB","JOHNNY","ROY","SIMONA"],["BRANDON","CASEY","ERIN","JOHNNY","JULIA","ROY","SHANNON","SIMONA"],["BENJI","BRANDON","ERIN","GENKI","JACOB","JOHNNY","JULIA","ROY","SHANNON"],["BENJI","DREW","GENKI","JACOB","JOHNNY","JULIA","ROY"],["BRANDON","CASEY","ERIN","JACOB","JOHNNY","JULIA","ROY","SHANNON","SIMONA"],["BENJI","BRANDON","CASEY","ERIN","JACOB","JULIA","SHANNON"],["BENJI","BRANDON","JACOB","JOHNNY","ROY","SIMONA"],["BENJI","DREW","GENKI","ROY"],["BENJI","BRANDON","CASEY","DREW","GENKI","JACOB","JOHNNY","SIMONA"]],
-[["BENJI","BRANDON","CASEY","DREW","JACOB","JOHNNY","RAYA","SIMONA"],["BRANDON","CASEY","JOHNNY","JULIA","RAYA","SIMONA"],["BENJI","BRANDON","JACOB","JOHNNY","JULIA","RAYA"],["BENJI","DREW","JACOB","JOHNNY","JULIA","RAYA"],["BRANDON","CASEY","JACOB","JOHNNY","JULIA","RAYA","SIMONA"],["BENJI","BRANDON","CASEY","JACOB","JULIA"],["BENJI","BRANDON","JACOB","JOHNNY","RAYA","SIMONA"],["BENJI","DREW","RAYA"],["BENJI","BRANDON","CASEY","DREW","JACOB","JOHNNY","RAYA","SIMONA"]],
+[["BENJI","BRANDON","CHRIS","DREW","GENKI","JACOB","JOHNNY","RAYA","ROY","SIMONA","STEPH"],["BRANDON","CHRIS","JOHNNY","JULIA","RAYA","ROY","STEPH"],["BENJI","BRANDON","CHRIS","GENKI","JACOB","JOHNNY","JULIA","RAYA","ROY","STEPH"],["BENJI","CHRIS","DREW","GENKI","JACOB","JOHNNY","JULIA","RAYA","ROY","STEPH"],["BRANDON","CHRIS","JACOB","JOHNNY","JULIA","RAYA","ROY","STEPH"],["BENJI","BRANDON","CHRIS","JACOB","JULIA"],["BENJI","BRANDON","CHRIS","JACOB","JOHNNY","RAYA","ROY","SIMONA","STEPH"],["BENJI","CHRIS","DREW","GENKI","RAYA","ROY","STEPH"],["BENJI","BRANDON","DREW","GENKI","JACOB","JOHNNY","RAYA","SIMONA","STEPH"]],
+[["BENJI","BRANDON","DREW","ERIN","GENKI","JACOB","JOHNNY","RAYA","SIMONA"],["BRANDON","ERIN","JOHNNY","JULIA","RAYA"],["BENJI","BRANDON","ERIN","GENKI","JACOB","JOHNNY","JULIA","RAYA"],["BENJI","DREW","GENKI","JACOB","JOHNNY","JULIA","RAYA"],["BRANDON","ERIN","JACOB","JOHNNY","JULIA","RAYA"],["BENJI","BRANDON","ERIN","JACOB","JULIA"],["BENJI","BRANDON","JACOB","JOHNNY","RAYA","SIMONA"],["BENJI","DREW","GENKI","RAYA"],["BENJI","BRANDON","DREW","GENKI","JACOB","JOHNNY","RAYA","SIMONA"]],
+[["BENJI","BRANDON","CHRIS","DREW","GENKI","JACOB","JOHNNY","SIMONA","STEPH"],["BRANDON","CHRIS","JOHNNY","JULIA","SHANNON","STEPH"],["BENJI","BRANDON","CHRIS","GENKI","JACOB","JOHNNY","JULIA","SHANNON","STEPH"],["BENJI","CHRIS","DREW","GENKI","JACOB","JOHNNY","JULIA","STEPH"],["BRANDON","CHRIS","JACOB","JOHNNY","JULIA","SHANNON","STEPH"],["BENJI","BRANDON","CHRIS","JACOB","JULIA","SHANNON"],["BENJI","BRANDON","CHRIS","JACOB","JOHNNY","SIMONA","STEPH"],["BENJI","CHRIS","DREW","GENKI","STEPH"],["BENJI","BRANDON","DREW","GENKI","JACOB","JOHNNY","SIMONA","STEPH"]],
+[["BENJI","BRANDON","DREW","GENKI","JACOB","JOHNNY","RAYA","ROY","SIMONA","STEPH"],["BRANDON","JOHNNY","RAYA","ROY","STEPH"],["BENJI","BRANDON","GENKI","JACOB","JOHNNY","RAYA","ROY","STEPH"],["BENJI","DREW","GENKI","JACOB","JOHNNY","RAYA","ROY","STEPH"],["BRANDON","JACOB","JOHNNY","RAYA","ROY","STEPH"],["BENJI","BRANDON","JACOB"],["BENJI","BRANDON","JACOB","JOHNNY","RAYA","ROY","SIMONA","STEPH"],["BENJI","DREW","GENKI","RAYA","ROY","STEPH"],["BENJI","BRANDON","DREW","GENKI","JACOB","JOHNNY","RAYA","SIMONA","STEPH"]],
+[["BENJI","BRANDON","CASEY","DREW","ERIN","GENKI","JACOB","JOHNNY","ROY","SIMONA"],["BRANDON","CASEY","ERIN","JOHNNY","JULIA","ROY","SHANNON"],["BENJI","BRANDON","ERIN","GENKI","JACOB","JOHNNY","JULIA","ROY","SHANNON"],["BENJI","DREW","GENKI","JACOB","JOHNNY","JULIA","ROY"],["BRANDON","CASEY","ERIN","JACOB","JOHNNY","JULIA","ROY","SHANNON"],["BENJI","BRANDON","CASEY","ERIN","JACOB","JULIA","SHANNON"],["BENJI","BRANDON","JACOB","JOHNNY","ROY","SIMONA"],["BENJI","DREW","GENKI","ROY"],["BENJI","BRANDON","CASEY","DREW","GENKI","JACOB","JOHNNY","SIMONA"]],
+[["BENJI","BRANDON","CASEY","DREW","JACOB","JOHNNY","RAYA","SIMONA"],["BRANDON","CASEY","JOHNNY","JULIA","RAYA"],["BENJI","BRANDON","JACOB","JOHNNY","JULIA","RAYA"],["BENJI","DREW","JACOB","JOHNNY","JULIA","RAYA"],["BRANDON","CASEY","JACOB","JOHNNY","JULIA","RAYA"],["BENJI","BRANDON","CASEY","JACOB","JULIA"],["BENJI","BRANDON","JACOB","JOHNNY","RAYA","SIMONA"],["BENJI","DREW","RAYA"],["BENJI","BRANDON","CASEY","DREW","JACOB","JOHNNY","RAYA","SIMONA"]],
 [["BENJI","BRANDON","CASEY","CHRIS","GENKI","JACOB","JOHNNY","RAYA","STEPH"],["BRANDON","CASEY","CHRIS","JOHNNY","RAYA","STEPH"],["BENJI","BRANDON","CHRIS","GENKI","JACOB","JOHNNY","RAYA","STEPH"],["BENJI","CHRIS","GENKI","JACOB","JOHNNY","RAYA","STEPH"],["BRANDON","CASEY","CHRIS","JACOB","JOHNNY","RAYA","STEPH"],["BENJI","BRANDON","CASEY","CHRIS","JACOB"],["BENJI","BRANDON","CHRIS","JACOB","JOHNNY","RAYA","STEPH"],["BENJI","CHRIS","GENKI","RAYA","STEPH"],["BENJI","BRANDON","CASEY","GENKI","JACOB","JOHNNY","RAYA","STEPH"]],
-[["BENJI","BRANDON","DREW","ERIN","GENKI","JOHNNY","RAYA","SIMONA"],["BRANDON","ERIN","JOHNNY","JULIA","RAYA","SIMONA"],["BENJI","BRANDON","ERIN","GENKI","JOHNNY","JULIA","RAYA"],["BENJI","DREW","GENKI","JOHNNY","JULIA","RAYA"],["BRANDON","ERIN","JOHNNY","JULIA","RAYA","SIMONA"],["BENJI","BRANDON","ERIN","JULIA"],["BENJI","BRANDON","JOHNNY","RAYA","SIMONA"],["BENJI","DREW","GENKI","RAYA"],["BENJI","BRANDON","DREW","GENKI","JOHNNY","RAYA","SIMONA"]],
-[["BRANDON","CASEY","DREW","GENKI","JACOB","ROY","SIMONA","STEPH"],["BRANDON","CASEY","JULIA","ROY","SIMONA","STEPH"],["BRANDON","GENKI","JACOB","JULIA","ROY","STEPH"],["DREW","GENKI","JACOB","JULIA","ROY","STEPH"],["BRANDON","CASEY","JACOB","JULIA","ROY","SIMONA","STEPH"],["BRANDON","CASEY","JACOB","JULIA"],["BRANDON","JACOB","ROY","SIMONA","STEPH"],["DREW","GENKI","ROY","STEPH"],["BRANDON","CASEY","DREW","GENKI","JACOB","SIMONA","STEPH"]]
+[["BENJI","BRANDON","DREW","ERIN","GENKI","JOHNNY","RAYA","SIMONA"],["BRANDON","ERIN","JOHNNY","JULIA","RAYA"],["BENJI","BRANDON","ERIN","GENKI","JOHNNY","JULIA","RAYA"],["BENJI","DREW","GENKI","JOHNNY","JULIA","RAYA"],["BRANDON","ERIN","JOHNNY","JULIA","RAYA"],["BENJI","BRANDON","ERIN","JULIA"],["BENJI","BRANDON","JOHNNY","RAYA","SIMONA"],["BENJI","DREW","GENKI","RAYA"],["BENJI","BRANDON","DREW","GENKI","JOHNNY","RAYA","SIMONA"]],
+[["BRANDON","CASEY","DREW","GENKI","JACOB","JOHNNY","ROY","SIMONA","STEPH"],["BRANDON","CASEY","JOHNNY","JULIA","ROY","STEPH"],["BRANDON","GENKI","JACOB","JOHNNY","JULIA","ROY","STEPH"],["DREW","GENKI","JACOB","JOHNNY","JULIA","ROY","STEPH"],["BRANDON","CASEY","JACOB","JOHNNY","JULIA","ROY","STEPH"],["BRANDON","CASEY","JACOB","JULIA"],["BRANDON","JACOB","JOHNNY","ROY","SIMONA","STEPH"],["DREW","GENKI","ROY","STEPH"],["BRANDON","CASEY","DREW","GENKI","JACOB","JOHNNY","SIMONA","STEPH"]]
 ];
 
 let players=[{name:"Player 1",color:"#e85d5d"},{name:"Player 2",color:"#4caf50"}];
 let board,miniWon,currentPlayer,scores,forcedMacro,activeCell,wrongGuesses,lastGuessed;
 let starterPlayer=0;
-let timerSeconds=30,timerInterval=null,timerRunning=false;
+let timerSeconds=60,timerInterval=null,timerRunning=false;
+
+function handleTimesUp(){
+  const o=document.getElementById('timesup-overlay');
+  o.style.display='flex';
+  setTimeout(()=>{
+    o.style.display='none';
+    if(document.getElementById('modal-overlay').classList.contains('open'))closeModal();
+    forcedMacro=null;lastGuessed[currentPlayer]=null;
+    currentPlayer=1-currentPlayer;
+    updateUI();resetTimer();toggleTimer();
+  },1200);
+}
 
 function setStarter(p){
   starterPlayer=p;
@@ -231,6 +248,7 @@ function toggleTimer(){
         clearInterval(timerInterval);timerInterval=null;timerRunning=false;
         document.getElementById('timer-toggle-btn').textContent='▶ START';
         document.getElementById('timer-toggle-btn').classList.remove('running');
+        handleTimesUp();
       }
     },1000);
   }
@@ -238,7 +256,7 @@ function toggleTimer(){
 
 function resetTimer(){
   clearInterval(timerInterval);timerInterval=null;timerRunning=false;
-  timerSeconds=30;updateTimerDisplay();
+  timerSeconds=60;updateTimerDisplay();
   document.getElementById('timer-toggle-btn').textContent='▶ START';
   document.getElementById('timer-toggle-btn').classList.remove('running');
 }
@@ -369,7 +387,7 @@ function confirmAnswer(name){
     wrongGuesses[r][c].add(name);
     document.getElementById('modal-inner').innerHTML=`<div class="modal-correct" style="color:#e85d5d">INCORRECT!</div>`;
     setTimeout(()=>{
-      forcedMacro=null;lastGuessed[currentPlayer]=null;currentPlayer=1-currentPlayer;closeModal();updateUI();
+      forcedMacro=null;lastGuessed[currentPlayer]=null;currentPlayer=1-currentPlayer;closeModal();updateUI();resetTimer();toggleTimer();
     },900);
   }
 }
@@ -393,7 +411,7 @@ function commitCorrect(r,c,name){
   const nm=r%3,nc=c%3;
   if(won){forcedMacro=(miniWon[nm][nc]===null&&!isMiniGridFull(nm,nc))?{mr:nm,mc:nc}:null;}
   else{forcedMacro=(miniWon[nm][nc]!==null||isMiniGridFull(nm,nc))?null:{mr:nm,mc:nc};}
-  lastGuessed[currentPlayer]=name;currentPlayer=1-currentPlayer;closeModal();updateUI();
+  lastGuessed[currentPlayer]=name;currentPlayer=1-currentPlayer;closeModal();updateUI();resetTimer();toggleTimer();
 }
 
 function closeModal(){document.getElementById('modal-overlay').classList.remove('open');activeCell=null;}
