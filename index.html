@@ -480,13 +480,25 @@ function isMiniGridFull(mr,mc){for(let i=0;i<3;i++)for(let j=0;j<3;j++)if(!board
 
 function renderMiniWon(mr,mc,p){
   const col=players[p].color;
+  const tc=getLabelColor(col);
+  const g=Array.from({length:3},(_,i)=>Array.from({length:3},(_,j)=>{const d=board[mr*3+i][mc*3+j];return d?d.player:null;}));
+  let winLine=null;
+  for(const l of[[[0,0],[0,1],[0,2]],[[1,0],[1,1],[1,2]],[[2,0],[2,1],[2,2]],[[0,0],[1,0],[2,0]],[[0,1],[1,1],[2,1]],[[0,2],[1,2],[2,2]],[[0,0],[1,1],[2,2]],[[0,2],[1,1],[2,0]]]){
+    const v=l.map(([ri,ci])=>g[ri][ci]);
+    if(v[0]!==null&&v[0]===v[1]&&v[1]===v[2]){winLine=l;break;}
+  }
+  if(!winLine)return;
+  const winSet=new Set(winLine.map(([ri,ci])=>`${ri},${ci}`));
   for(let i=0;i<3;i++)for(let j=0;j<3;j++){
     const cell=document.getElementById(`cell-${mr*3+i}-${mc*3+j}`);
-    cell.classList.add('claimed');cell.innerHTML='';cell.style.background=col;
-    const n=document.createElement('div');
-    const tc=getLabelColor(col);
-    n.style.cssText=`position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-family:'Bebas Neue',sans-serif;font-size:11px;letter-spacing:1px;color:${tc};text-shadow:0 1px 3px rgba(0,0,0,0.2);text-align:center;padding:2px;`;
-    n.textContent=players[p].name.toUpperCase();cell.appendChild(n);
+    if(winSet.has(`${i},${j}`)){
+      cell.classList.add('claimed');cell.innerHTML='';cell.style.background=col;
+      const n=document.createElement('div');
+      n.style.cssText=`position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-family:'Bebas Neue',sans-serif;font-size:11px;letter-spacing:1px;color:${tc};text-shadow:0 1px 3px rgba(0,0,0,0.2);text-align:center;padding:2px;`;
+      n.textContent=players[p].name.toUpperCase();cell.appendChild(n);
+    } else {
+      cell.classList.add('locked');
+    }
   }
 }
 
