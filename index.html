@@ -298,8 +298,8 @@ function updateStarterLabels(){
   const b2=document.getElementById('starter-p2');
   b1.textContent=n1+' Goes First';
   b2.textContent=n2+' Goes First';
-  if(b1.classList.contains('active-p1'))b1.style.background=c1;
-  if(b2.classList.contains('active-p2'))b2.style.background=c2;
+  document.documentElement.style.setProperty('--p1',c1);
+  document.documentElement.style.setProperty('--p2',c2);
 }
 const p1pick=document.getElementById('p1-color-picker');
 const p1text=document.getElementById('p1-color');
