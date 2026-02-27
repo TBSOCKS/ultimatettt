@@ -629,7 +629,14 @@ function commitCorrect(r,c,name){
 }else{
   forcedMacro=(miniWon[nm][nc]!==null||isMiniGridFull(nm,nc))?null:{mr:nm,mc:nc};
 }
-  lastGuessed[currentPlayer]=name;currentPlayer=1-currentPlayer;closeModal();updateUI();
+  lastGuessed[currentPlayer]=name;
+currentPlayer=1-currentPlayer;
+
+// reset to 1:00 and keep paused after a correct answer
+resetTimer();
+
+closeModal();
+updateUI();
 }
 
 function closeModal(){
