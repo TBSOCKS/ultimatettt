@@ -39,7 +39,7 @@
 
   /* ===== GAME SCREEN ===== */
   #game-screen { display: none; flex-direction: column; height: 100vh; padding: 6px; gap: 6px; overflow: hidden; }
-  .game-header { display: flex; align-items: center; justify-content: space-between; background: #fff; border: 1px solid var(--border); border-radius: 10px; padding: 5px 12px; flex-shrink: 0; gap: 6px; flex-wrap: wrap; }
+  .game-header { display: flex; align-items: center; justify-content: space-between; background: #fff; border: 1px solid var(--border); border-radius: 10px; padding: 5px 12px; flex-shrink: 0; gap: 6px; flex-wrap: wrap; position: relative; }
   .player-badge { display: flex; align-items: center; gap: 8px; padding: 6px 14px; border-radius: 6px; border: 2px solid transparent; transition: all 0.25s; }
   .player-badge.active { border-color: var(--player-color,var(--accent)); background: color-mix(in srgb,var(--player-color,var(--accent)) 12%,transparent); }
   .badge-dot { width: 11px; height: 11px; border-radius: 50%; flex-shrink: 0; }
@@ -120,6 +120,7 @@
         <input class="setup-input" id="p1-name" type="text" placeholder="Enter name..." value="Player 1">
         <div class="color-row">
           <div class="color-preview" id="p1-preview" style="background:#e85d5d"></div>
+          <input type="color" id="p1-color-picker" value="#e85d5d" style="width:30px;height:30px;border:1px solid var(--border);border-radius:6px;padding:2px;cursor:pointer;background:none;flex-shrink:0;">
           <input class="setup-input" id="p1-color" type="text" placeholder="#e85d5d" value="#e85d5d">
         </div>
       </div>
@@ -128,6 +129,7 @@
         <input class="setup-input" id="p2-name" type="text" placeholder="Enter name..." value="Player 2">
         <div class="color-row">
           <div class="color-preview" id="p2-preview" style="background:#4caf50"></div>
+          <input type="color" id="p2-color-picker" value="#4caf50" style="width:30px;height:30px;border:1px solid var(--border);border-radius:6px;padding:2px;cursor:pointer;background:none;flex-shrink:0;">
           <input class="setup-input" id="p2-color" type="text" placeholder="#4caf50" value="#4caf50">
         </div>
       </div>
@@ -160,6 +162,9 @@
         <button class="timer-btn" id="timer-toggle-btn" onclick="toggleTimer()">▶ START</button>
         <button class="timer-btn" onclick="resetTimer()">↺ RESET</button>
       </div>
+    </div>
+    <div style="position:absolute;top:6px;right:6px;">
+      <button onclick="if(confirm('Reset the game?'))location.reload()" style="background:transparent;border:1px solid var(--border);color:var(--muted);border-radius:5px;padding:3px 9px;font-family:'Bebas Neue',sans-serif;font-size:11px;letter-spacing:1px;cursor:pointer;">↺ RESET</button>
     </div>
     <div class="player-badge" id="badge-p2">
       <div class="badge-dot" id="dot-p2" style="background:#4caf50"></div>
@@ -277,8 +282,37 @@ function initState(){
   lastGuessed=[null,null];resetTimer();
 }
 
-document.getElementById('p1-color').addEventListener('input',e=>document.getElementById('p1-preview').style.background=e.target.value);
-document.getElementById('p2-color').addEventListener('input',e=>document.getElementById('p2-preview').style.background=e.target.value);
+function syncColor(picker,text,preview){
+  const val=picker?picker.value:text.value;
+  if(preview)preview.style.background=val;
+  if(picker&&text)text.value=val;
+  if(picker)picker.value=val;
+  updateStarterLabels();
+}
+function updateStarterLabels(){
+  const n1=document.getElementById('p1-name').value||'Player 1';
+  const n2=document.getElementById('p2-name').value||'Player 2';
+  const c1=document.getElementById('p1-color').value||'#e85d5d';
+  const c2=document.getElementById('p2-color').value||'#4caf50';
+  const b1=document.getElementById('starter-p1');
+  const b2=document.getElementById('starter-p2');
+  b1.textContent=n1+' Goes First';
+  b2.textContent=n2+' Goes First';
+  if(b1.classList.contains('active-p1'))b1.style.background=c1;
+  if(b2.classList.contains('active-p2'))b2.style.background=c2;
+}
+const p1pick=document.getElementById('p1-color-picker');
+const p1text=document.getElementById('p1-color');
+const p1prev=document.getElementById('p1-preview');
+const p2pick=document.getElementById('p2-color-picker');
+const p2text=document.getElementById('p2-color');
+const p2prev=document.getElementById('p2-preview');
+p1pick.addEventListener('input',()=>syncColor(p1pick,p1text,p1prev));
+p1text.addEventListener('input',()=>syncColor(null,p1text,p1prev));
+p2pick.addEventListener('input',()=>syncColor(p2pick,p2text,p2prev));
+p2text.addEventListener('input',()=>syncColor(null,p2text,p2prev));
+document.getElementById('p1-name').addEventListener('input',updateStarterLabels);
+document.getElementById('p2-name').addEventListener('input',updateStarterLabels);
 
 function startGame(){
   players[0].name=document.getElementById('p1-name').value||'Player 1';
