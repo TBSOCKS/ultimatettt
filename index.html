@@ -108,11 +108,14 @@
   .cell-border-overlay { position: absolute; inset: 0; border: 4px solid var(--claim-color, transparent); pointer-events: none; z-index: 2; }
   .mini-won-overlay { position: absolute; inset: 0; pointer-events: none; z-index: 10; display: flex; align-items: center; justify-content: center; font-family: 'Bebas Neue', sans-serif; letter-spacing: 1px; }
 
-  /* ===== MODAL ===== */
-  #modal-overlay { display: none; position: fixed; inset: 0; background: rgba(10,20,40,0.55); z-index: 100; align-items: center; justify-content: center; backdrop-filter: blur(4px); }
+   /* ===== MODAL ===== */
+  #modal-overlay { display: none; position: fixed; inset: 0; background: rgba(10,20,40,0.55); z-index: 200; align-items: center; justify-content: center; backdrop-filter: blur(4px); }
   #modal-overlay.open { display: flex; }
+
+  /* Keep header/timer above the modal overlay */
+  .game-header { position: relative; z-index: 300; }
+
   .modal { background: #fff; border: 1px solid var(--border); border-radius: 16px; padding: 24px; width: 92%; max-width: 460px; display: flex; flex-direction: column; gap: 15px; animation: modal-in 0.2s ease; max-height: 90vh; overflow-y: auto; box-shadow: 0 8px 40px rgba(42,125,225,0.18); }
-  @keyframes modal-in { from { transform: translateY(12px) scale(0.97); opacity: 0; } to { transform: none; opacity: 1; } }
 
   .modal-title { font-family: 'Bebas Neue', sans-serif; font-size: 13px; letter-spacing: 3px; color: var(--muted); text-transform: uppercase; }
   .modal-cats { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
@@ -231,6 +234,8 @@ let players=[{name:"Player 1",color:"#e85d5d"},{name:"Player 2",color:"#4caf50"}
 let board,miniWon,currentPlayer,scores,forcedMacro,activeCell,wrongGuesses,lastGuessed;
 let starterPlayer=0;
 let timerSeconds=30,timerInterval=null,timerRunning=false;
+let timerHasStartedOnce = false;
+let awaitingAnswer = false;
 
 function setStarter(p){
   starterPlayer=p;
@@ -244,13 +249,21 @@ function toggleTimer(){
     document.getElementById('timer-toggle-btn').textContent='▶ START';
     document.getElementById('timer-toggle-btn').classList.remove('running');
   } else {
+    timerHasStartedOnce = true;
     timerRunning=true;
     document.getElementById('timer-toggle-btn').textContent='⏸ STOP';
     document.getElementById('timer-toggle-btn').classList.add('running');
     timerInterval=setInterval(()=>{
       timerSeconds--;
       updateTimerDisplay();
-      if(timerSeconds<=0){clearInterval(timerInterval);timerInterval=null;timerRunning=false;document.getElementById('timer-toggle-btn').textContent='▶ START';document.getElementById('timer-toggle-btn').classList.remove('running');}
+
+      if(timerSeconds<=0){
+        clearInterval(timerInterval);timerInterval=null;timerRunning=false;
+        document.getElementById('timer-toggle-btn').textContent='▶ START';
+        document.getElementById('timer-toggle-btn').classList.remove('running');
+
+        onTimerExpired();
+      }
     },1000);
   }
 }
@@ -268,6 +281,26 @@ function updateTimerDisplay(){
   const m=Math.floor(timerSeconds/60),s=timerSeconds%60;
   d.textContent=`${m}:${s.toString().padStart(2,'0')}`;
   d.classList.toggle('warning',timerSeconds<=10);
+}
+
+function startTimerIfAllowed(){
+  if(timerHasStartedOnce && !timerRunning){
+    toggleTimer();
+  }
+}
+
+function onTimerExpired(){
+  // Always switch turns when timer hits 0
+  forcedMacro = null;
+  lastGuessed[currentPlayer] = null;
+  currentPlayer = 1 - currentPlayer;
+
+  // Close modal if it's open (safe to call either way)
+  closeModal();
+
+  resetTimer();
+  startTimerIfAllowed();
+  updateUI();
 }
 
 function initState(){board=Array.from({length:9},()=>Array(9).fill(null));miniWon=Array.from({length:3},()=>Array(3).fill(null));currentPlayer=starterPlayer;scores=[0,0];forcedMacro=null;activeCell=null;wrongGuesses=Array.from({length:9},()=>Array.from({length:9},()=>new Set()));
@@ -330,7 +363,8 @@ document.getElementById('last-p2').textContent=lastGuessed[1]?`Last: ${lastGuess
 
 function onCellClick(r,c){
   if(!document.getElementById(`cell-${r}-${c}`).classList.contains('selectable'))return;
-  activeCell={r,c};
+    activeCell={r,c};
+  awaitingAnswer = true;
   const mi=document.getElementById('modal-inner');
   mi.innerHTML=`
     <div class="modal-title">Make Your Guess</div>
@@ -383,8 +417,14 @@ function confirmAnswer(name){
   } else {
     wrongGuesses[r][c].add(name);
     document.getElementById('modal-inner').innerHTML=`<div class="modal-correct" style="color:#e85d5d">INCORRECT!</div>`;
-    setTimeout(()=>{
-      forcedMacro=null; lastGuessed[currentPlayer]=null; currentPlayer=1-currentPlayer; closeModal(); updateUI();
+        setTimeout(()=>{
+      forcedMacro=null;
+      lastGuessed[currentPlayer]=null;
+      currentPlayer=1-currentPlayer;
+      closeModal();
+      resetTimer();
+      startTimerIfAllowed();
+      updateUI();
     }, 900);
   }
 }
@@ -411,10 +451,19 @@ if(won){
 }else{
   forcedMacro=(miniWon[nm][nc]!==null||isMiniGridFull(nm,nc))?null:{mr:nm,mc:nc};
 }
-  lastGuessed[currentPlayer]=name;currentPlayer=1-currentPlayer;closeModal();updateUI();
+    lastGuessed[currentPlayer]=name;
+  currentPlayer=1-currentPlayer;
+  closeModal();
+  resetTimer();
+  startTimerIfAllowed();
+  updateUI();
 }
 
-function closeModal(){document.getElementById('modal-overlay').classList.remove('open');activeCell=null;}
+function closeModal(){
+  document.getElementById('modal-overlay').classList.remove('open');
+  activeCell=null;
+  awaitingAnswer = false;
+}
 
 function renderCell(r,c){
   const cell=document.getElementById(`cell-${r}-${c}`),data=board[r][c];if(!data)return;
