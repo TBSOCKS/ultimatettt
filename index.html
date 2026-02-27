@@ -109,8 +109,74 @@
   .mini-won-overlay { position: absolute; inset: 0; pointer-events: none; z-index: 10; display: flex; align-items: center; justify-content: center; font-family: 'Bebas Neue', sans-serif; letter-spacing: 1px; }
 
   /* ===== MODAL ===== */
-  #modal-overlay { display: none; position: fixed; inset: 0; background: rgba(10,20,40,0.55); z-index: 200; align-items: center; justify-content: center; backdrop-filter: blur(4px); }
+  #modal-overlay { display: none; position: fixed; inset: 0; background: rgba(10,20,40,0.55); z-index: 500; align-items: center; justify-content: center; backdrop-filter: blur(4px); }
   #modal-overlay.open { display: flex; }
+
+  /* ===== FLOATING TIMER PILL ===== */
+  #timer-float{
+    position: fixed;
+    top: 12px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 1000;
+    background: rgba(255,255,255,0.95);
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    padding: 8px 12px;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.18);
+
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .timer-float-btn{
+    width: 34px;
+    height: 34px;
+    border-radius: 999px;
+    border: 1px solid var(--border);
+    background: #fff;
+    color: var(--muted);
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 16px;
+    letter-spacing: 1px;
+    cursor: pointer;
+    line-height: 1;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.15s;
+  }
+
+  .timer-float-btn:hover{
+    border-color: var(--accent);
+    color: var(--accent);
+  }
+
+  .timer-float-btn.running{
+    border-color: #e85d5d;
+    color: #e85d5d;
+  }
+
+  /* ===== TIME'S UP OVERLAY ===== */
+  #timesup-overlay{
+  display:none;
+  position:fixed;
+  inset:0;
+  z-index:2000;
+    background:rgba(10,20,40,0.68);
+    align-items:center;
+    justify-content:center;
+    backdrop-filter: blur(3px);
+  }
+  #timesup-overlay.open{ display:flex; }
+  #timesup-overlay .timesup-text{
+    font-family:'Bebas Neue', sans-serif;
+    font-size:64px;
+    letter-spacing:6px;
+    color:#fff;
+    text-shadow:0 8px 32px rgba(0,0,0,0.45);
+  }
 
   /* Keep header/timer above the modal overlay */
   .game-header { position: relative; z-index: 300; }
@@ -138,7 +204,7 @@
   @keyframes correct-pop { 0% { transform: scale(0.6); opacity: 0; } 70% { transform: scale(1.1); } 100% { transform: scale(1); opacity: 1; } }
 
   /* ===== WIN ===== */
-  #win-screen { display: none; position: fixed; inset: 0; background: rgba(240,244,248,0.96); z-index: 200; align-items: center; justify-content: center; flex-direction: column; gap: 16px; text-align: center; }
+  #win-screen { display: none; position: fixed; inset: 0; background: rgba(240,244,248,0.96); z-index: 2100; align-items: center; justify-content: center; flex-direction: column; gap: 16px; text-align: center; }
   #win-screen.open { display: flex; }
   .win-title { font-family: 'Bebas Neue', sans-serif; font-size: clamp(60px,12vw,120px); letter-spacing: 8px; line-height: 1; }
   .win-sub { font-size: 14px; color: var(--muted); letter-spacing: 3px; text-transform: uppercase; }
@@ -193,10 +259,14 @@
     </div>
 
     <div style="text-align:center;display:flex;flex-direction:column;align-items:center;gap:6px;">
-      <div class="turn-indicator">Current Turn<span class="turn-name" id="turn-display" style="color:var(--accent)">—</span></div>
-      <div class="timer-display" id="timer-display">0:30</div>
+           <div class="turn-indicator">Current Turn<span class="turn-name" id="turn-display" style="color:var(--accent)">—</span></div>
+
+      <div id="timer-float">
+        <div class="timer-display" id="timer-display">1:00</div>
+        <button class="timer-float-btn" id="timer-toggle-btn" onclick="toggleTimer()" title="Start / Pause">▶</button>
+      </div>
+
       <div class="timer-controls">
-        <button class="timer-btn" id="timer-toggle-btn" onclick="toggleTimer()">▶ START</button>
         <button class="timer-btn" onclick="resetTimer()">↺ RESET</button>
       </div>
       <a href="/test.html" style="background:transparent;border:1px solid var(--border);color:var(--muted);border-radius:6px;padding:5px 14px;font-family:'Bebas Neue',sans-serif;font-size:13px;letter-spacing:2px;text-decoration:none;">SANDBOX →</a>
@@ -227,6 +297,10 @@
   <button class="win-restart" onclick="location.reload()">PLAY AGAIN</button>
 </div>
 
+<div id="timesup-overlay">
+  <div class="timesup-text">TIME’S UP!</div>
+</div>
+
 <script>
 const ALL_CAST=["BENJI","BRANDON","CASEY","CHRIS","DREW","ERIN","GENKI","JACOB","JOHNNY","JULIA","RAYA","ROY","SHANNON","SIMONA","STEPH"];
 const CAST_PHOTOS={"BENJI":"","BRANDON":"","CASEY":"","CHRIS":"","DREW":"","ERIN":"","GENKI":"","JACOB":"","JOHNNY":"","JULIA":"","RAYA":"","ROY":"","SHANNON":"","SIMONA":"","STEPH":""};
@@ -237,7 +311,7 @@ const VALID_ANSWERS=[[["BENJI","BRANDON","CHRIS","DREW","GENKI","JACOB","JOHNNY"
 let players=[{name:"Player 1",color:"#e85d5d"},{name:"Player 2",color:"#4caf50"}];
 let board,miniWon,currentPlayer,scores,forcedMacro,activeCell,wrongGuesses,lastGuessed;
 let starterPlayer=0;
-let timerSeconds=30,timerInterval=null,timerRunning=false;
+let timerSeconds=60,timerInterval=null,timerRunning=false;
 
 function setStarter(p){
   starterPlayer=p;
@@ -248,19 +322,20 @@ function setStarter(p){
 function toggleTimer(){
   if(timerRunning){
     clearInterval(timerInterval);timerInterval=null;timerRunning=false;
-    document.getElementById('timer-toggle-btn').textContent='▶ START';
+    document.getElementById('timer-toggle-btn').textContent='▶';
     document.getElementById('timer-toggle-btn').classList.remove('running');
   } else {
     timerRunning=true;
-    document.getElementById('timer-toggle-btn').textContent='⏸ STOP';
+    document.getElementById('timer-toggle-btn').textContent='⏸';
     document.getElementById('timer-toggle-btn').classList.add('running');
     timerInterval=setInterval(()=>{
       timerSeconds--;
       updateTimerDisplay();
       if(timerSeconds<=0){
         clearInterval(timerInterval);timerInterval=null;timerRunning=false;
-        document.getElementById('timer-toggle-btn').textContent='▶ START';
+        document.getElementById('timer-toggle-btn').textContent='▶';
         document.getElementById('timer-toggle-btn').classList.remove('running');
+        handleTimesUp();
       }
     },1000);
   }
@@ -268,9 +343,62 @@ function toggleTimer(){
 
 function resetTimer(){
   clearInterval(timerInterval); timerInterval=null; timerRunning=false;
-  timerSeconds=30; updateTimerDisplay();
-  document.getElementById('timer-toggle-btn').textContent='▶ START';
+  timerSeconds=60; updateTimerDisplay();
+  document.getElementById('timer-toggle-btn').textContent='▶';
   document.getElementById('timer-toggle-btn').classList.remove('running');
+}
+
+  function showTimesUpFlash(){ 
+  const o=document.getElementById('timesup-overlay');
+  if(!o) return Promise.resolve();
+  o.classList.add('open');
+  return new Promise(res=>{
+    setTimeout(()=>{
+      o.classList.remove('open');
+      res();
+    },700);
+  });
+}
+
+// Used when time expires and no guess was confirmed/committed.
+async function handleTimesUp(){
+  const modalOpen = document.getElementById('modal-overlay').classList.contains('open');
+
+  clearInterval(timerInterval);
+  timerInterval = null;
+
+  if(modalOpen){
+    await showTimesUpFlash();
+    closeModal();
+  } else {
+    await showTimesUpFlash();
+  }
+
+  forcedMacro = null;
+  lastGuessed[currentPlayer] = null;
+  currentPlayer = 1 - currentPlayer;
+
+  timerSeconds = 60;
+  updateTimerDisplay();
+  updateUI();
+
+  // Auto-run only because time expired
+  timerRunning = true;
+  document.getElementById('timer-toggle-btn').textContent = '⏸';
+  document.getElementById('timer-toggle-btn').classList.add('running');
+
+  timerInterval = setInterval(()=>{
+    timerSeconds--;
+    updateTimerDisplay();
+    if(timerSeconds <= 0){
+      clearInterval(timerInterval);
+      timerInterval = null;
+      timerRunning = false;
+      document.getElementById('timer-toggle-btn').textContent = '▶';
+      document.getElementById('timer-toggle-btn').classList.remove('running');
+      handleTimesUp();
+    }
+  }, 1000);
 }
 
 function updateTimerDisplay(){
@@ -474,8 +602,13 @@ function commitCorrect(r,c,name){
     forcedMacro=(miniWon[nm][nc]!==null || isMiniGridFull(nm,nc))?null:{mr:nm,mc:nc};
   }
 
-  lastGuessed[currentPlayer]=name;
+    lastGuessed[currentPlayer]=name;
   currentPlayer=1-currentPlayer;
+
+  // reset to 1:00 and start immediately after a correct answer
+  resetTimer();
+  toggleTimer();
+
   closeModal();
   updateUI();
 }
@@ -551,6 +684,16 @@ function renderMiniWon(mr,mc,p){
 }
 
 function showWinScreen(p){
+  // stop timer
+  clearInterval(timerInterval);
+  timerInterval=null;
+  timerRunning=false;
+  const btn=document.getElementById('timer-toggle-btn');
+  if(btn){
+    btn.textContent='▶';
+    btn.classList.remove('running');
+  }
+
   document.getElementById('win-name').textContent=players[p].name.toUpperCase();
   document.getElementById('win-name').style.color=players[p].color;
   document.getElementById('win-screen').classList.add('open');
