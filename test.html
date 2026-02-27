@@ -118,9 +118,41 @@
   z-index: 1000;
   background: rgba(255,255,255,0.95);
   border: 1px solid var(--border);
-  border-radius: 12px;
-  padding: 8px 14px;
+  border-radius: 999px;
+  padding: 8px 12px;
   box-shadow: 0 8px 24px rgba(0,0,0,0.18);
+
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.timer-float-btn{
+  width: 34px;
+  height: 34px;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+  background: #fff;
+  color: var(--muted);
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 16px;
+  letter-spacing: 1px;
+  cursor: pointer;
+  line-height: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.15s;
+}
+
+.timer-float-btn:hover{
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+.timer-float-btn.running{
+  border-color: #e85d5d;
+  color: #e85d5d;
 }
   .modal { background: #fff; border: 1px solid var(--border); border-radius: 16px; padding: 24px; width: 92%; max-width: 460px; display: flex; flex-direction: column; gap: 15px; animation: modal-in 0.2s ease; max-height: 90vh; overflow-y: auto; box-shadow: 0 8px 40px rgba(42,125,225,0.18); }
   @keyframes modal-in { from { transform: translateY(12px) scale(0.97); opacity: 0; } to { transform: none; opacity: 1; } }
@@ -228,11 +260,17 @@
   <div class="turn-indicator">Current Turn<span class="turn-name" id="turn-display" style="color:var(--accent)">—</span></div>
   <div id="timer-float">
   <div class="timer-display" id="timer-display">0:30</div>
+
+  <!-- floating pause/start button -->
+  <button class="timer-float-btn" id="timer-toggle-btn" onclick="toggleTimer()" title="Start / Pause">
+    ▶
+  </button>
 </div>
-  <div class="timer-controls">
-    <button class="timer-btn" id="timer-toggle-btn" onclick="toggleTimer()">▶ START</button>
-    <button class="timer-btn" onclick="resetTimer()">↺ RESET</button>
-  </div>
+
+<!-- keep reset below if you want -->
+<div class="timer-controls">
+  <button class="timer-btn" onclick="resetTimer()">↺ RESET</button>
+</div>
   <button class="header-reset" onclick="confirmReset()">↺ RESET</button>
   <a href="/index.html" style="background:transparent;border:1px solid var(--border);color:var(--muted);border-radius:6px;padding:5px 14px;font-family:'Bebas Neue',sans-serif;font-size:13px;letter-spacing:2px;text-decoration:none;">← MAIN GAME</a>
 </div>
@@ -298,24 +336,24 @@ function setStarter(p){
 function toggleTimer(){
   if(timerRunning){
     clearInterval(timerInterval);timerInterval=null;timerRunning=false;
-    document.getElementById('timer-toggle-btn').textContent='▶ START';
+    document.getElementById('timer-toggle-btn').textContent='▶';
     document.getElementById('timer-toggle-btn').classList.remove('running');
   } else {
     timerRunning=true;
-    document.getElementById('timer-toggle-btn').textContent='⏸ STOP';
+    document.getElementById('timer-toggle-btn').textContent='⏸';
     document.getElementById('timer-toggle-btn').classList.add('running');
     timerInterval=setInterval(()=>{
       timerSeconds--;
       updateTimerDisplay();
-      if(timerSeconds<=0){clearInterval(timerInterval);timerInterval=null;timerRunning=false;document.getElementById('timer-toggle-btn').textContent='▶ START';document.getElementById('timer-toggle-btn').classList.remove('running');}
+      if(timerSeconds<=0){clearInterval(timerInterval);timerInterval=null;timerRunning=false;document.getElementById('timer-toggle-btn').textContent='▶';document.getElementById('timer-toggle-btn').classList.remove('running');}
     },1000);
   }
 }
 
 function resetTimer(){
-  clearInterval(timerInterval);timerInterval=null;timerRunning=false;
-  timerSeconds=30;updateTimerDisplay();
-  document.getElementById('timer-toggle-btn').textContent='▶ START';
+  clearInterval(timerInterval); timerInterval=null; timerRunning=false;
+  timerSeconds=30; updateTimerDisplay();
+  document.getElementById('timer-toggle-btn').textContent='▶';
   document.getElementById('timer-toggle-btn').classList.remove('running');
 }
 
