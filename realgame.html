@@ -101,7 +101,7 @@
   .cell-border-overlay { position: absolute; inset: 0; border: 4px solid var(--claim-color,transparent); pointer-events: none; z-index: 2; }
 
   /* ===== MODAL ===== */
-  #modal-overlay { display: none; position: fixed; inset: 0; background: rgba(10,20,40,0.55); z-index: 500; align-items: center; justify-content: center; backdrop-filter: blur(4px); }
+  #modal-overlay { display: none; position: fixed; inset: 0; background: rgba(10,20,40,0.55); z-index: 5000; align-items: center; justify-content: center; backdrop-filter: blur(4px); }
   #modal-overlay.open { display: flex; }
   #timer-float{
     position: fixed;
@@ -161,15 +161,15 @@
 
   /* ===== TIME'S UP OVERLAY ===== */
   #timesup-overlay{
-    display:none;
-    position:fixed;
-    inset:0;
-    z-index:2000;
-    background:rgba(10,20,40,0.68);
-    align-items:center;
-    justify-content:center;
-    backdrop-filter: blur(3px);
-  }
+  display:none;
+  position:fixed;
+  inset:0;
+  z-index: 7000;
+  background:rgba(10,20,40,0.68);
+  align-items:center;
+  justify-content:center;
+  backdrop-filter: blur(3px);
+}
   #timesup-overlay.open{ display:flex; }
   #timesup-overlay .timesup-text{
     font-family:'Bebas Neue', sans-serif;
@@ -191,7 +191,7 @@
   .win-reset:hover { background: #f0a500; color: #fff; }
 
   /* ===== CONFIRM ===== */
-  #confirm-overlay { display: none; position: fixed; inset: 0; background: rgba(10,20,40,0.5); z-index: 300; align-items: center; justify-content: center; backdrop-filter: blur(3px); }
+  #confirm-overlay { display: none; position: fixed; inset: 0; background: rgba(10,20,40,0.5); z-index: 6000; align-items: center; justify-content: center; backdrop-filter: blur(3px); }
   #confirm-overlay.open { display: flex; }
   .confirm-box { background: #fff; border: 1px solid var(--border); border-radius: 16px; padding: 28px; max-width: 340px; width: 90%; text-align: center; display: flex; flex-direction: column; gap: 16px; animation: modal-in 0.2s ease; }
   .confirm-title { font-family: 'Bebas Neue', sans-serif; font-size: 26px; letter-spacing: 3px; color: #b07800; }
