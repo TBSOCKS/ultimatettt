@@ -104,18 +104,21 @@
   #modal-overlay { display: none; position: fixed; inset: 0; background: rgba(10,20,40,0.55); z-index: 5000; align-items: center; justify-content: center; backdrop-filter: blur(4px); }
   #modal-overlay.open { display: flex; }
   #timer-float{
-  position: fixed;
-  top: 12px;
-  left: 50%;
-  transform: translateX(-50%);
-  z-index: 1500;
+  position: fixed !important;
+  top: 12px !important;
+  left: 50% !important;
+  transform: translateX(-50%) !important;
+
+  /* above the game UI, below the modal */
+  z-index: 3000 !important;
+
   background: rgba(255,255,255,0.95);
   border: 1px solid var(--border);
   border-radius: 999px;
   padding: 8px 12px;
   box-shadow: 0 8px 24px rgba(0,0,0,0.18);
 
-  display: flex;
+  display: none; /* we'll show it only when the game starts */
   align-items: center;
   gap: 10px;
 }
@@ -206,6 +209,12 @@
 </head>
 <body style="display:flex;flex-direction:column;min-height:100vh;">
 
+  <!-- ===== FLOATING TIMER (GLOBAL) ===== -->
+  <div id="timer-float">
+    <div class="timer-display" id="timer-display">1:00</div>
+    <button class="timer-float-btn" id="timer-toggle-btn" onclick="toggleTimer()" title="Start / Pause">▶</button>
+  </div>
+
 <!-- ========== SETUP ========== -->
 <div id="setup-screen">
   <div class="setup-title">Ultimate Tic Tac Trivia</div>
@@ -268,12 +277,6 @@
       <div class="badge-last" id="last-p2" style="font-size:10px;color:var(--muted);letter-spacing:0.5px;min-height:14px;"></div>
       <div class="badge-score">🏆 <span id="score-p2">0</span> / 3</div>
     </div>
-  </div>
-
-  <!-- ===== FLOATING TIMER (GLOBAL) ===== -->
-  <div id="timer-float">
-    <div class="timer-display" id="timer-display">1:00</div>
-    <button class="timer-float-btn" id="timer-toggle-btn" onclick="toggleTimer()" title="Start / Pause">▶</button>
   </div>
 
   <div class="grid-wrapper">
@@ -427,6 +430,10 @@ function startGame(){
   document.getElementById('badge-p2').style.setProperty('--player-color',players[1].color);
   document.getElementById('setup-screen').style.display='none';
   document.getElementById('game-screen').style.display='flex';
+
+  // show floating timer in game
+  document.getElementById('timer-float').style.display='flex';
+
   initState();buildGrid();updateUI();
 }
 
@@ -441,8 +448,11 @@ function doReset(){
   closeConfirm();
   document.getElementById('win-screen').classList.remove('open');
   document.getElementById('modal-overlay').classList.remove('open');
-  document.getElementById('game-screen').style.display='none';
+    document.getElementById('game-screen').style.display='none';
   document.getElementById('setup-screen').style.display='flex';
+
+  // hide floating timer on reset
+  document.getElementById('timer-float').style.display='none';
   document.getElementById('p1-name').value='Player 1';document.getElementById('p1-color').value='#e85d5d';document.getElementById('p1-preview').style.background='#e85d5d';
   document.getElementById('p2-name').value='Player 2';document.getElementById('p2-color').value='#4caf50';document.getElementById('p2-preview').style.background='#4caf50';
   document.getElementById('mega-grid').innerHTML='';
