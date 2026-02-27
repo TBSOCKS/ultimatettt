@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>BBH22 — Ultimate Tic Tac Trivia (Sandbox)</title>
+<title>BBH22 — Ultimate Tic Tac Trivia</title>
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
   :root {
@@ -22,21 +22,15 @@
   * { margin: 0; padding: 0; box-sizing: border-box; }
   body { background: var(--bg); color: var(--text); font-family: 'DM Sans', sans-serif; min-height: 100vh; }
 
-  /* ===== SANDBOX BANNER ===== */
-  .sandbox-banner {
-    background: #fff8e1; border-bottom: 2px solid #f0a500;
-    padding: 6px 16px; display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; flex-shrink: 0;
-  }
-  .sandbox-label { font-family: 'Bebas Neue', sans-serif; font-size: 14px; letter-spacing: 3px; color: #b07800; }
-  .sandbox-note { font-size: 11px; color: #a07000; letter-spacing: 0.5px; }
-  .reset-btn { background: transparent; border: 1px solid #f0a500; color: #b07800; border-radius: 6px; padding: 5px 14px; font-family: 'Bebas Neue', sans-serif; font-size: 13px; letter-spacing: 2px; cursor: pointer; transition: all 0.15s; }
-  .reset-btn:hover { background: #f0a500; color: #fff; }
-
   /* ===== SETUP ===== */
-  #setup-screen { display: flex; flex-direction: column; align-items: center; justify-content: center; flex: 1; padding: 40px 20px; background: linear-gradient(135deg,#e8f0f8 0%,#d0e4f4 100%); min-height: calc(100vh - 40px); }
+  #setup-screen {
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    flex: 1; padding: 40px 20px;
+    background: linear-gradient(135deg,#e8f0f8 0%,#d0e4f4 100%);
+    min-height: 100vh;
+  }
   .setup-title { font-family: 'Bebas Neue', sans-serif; font-size: clamp(32px,5vw,64px); letter-spacing: 5px; color: var(--accent); text-align: center; line-height: 1; margin-bottom: 6px; }
-  .setup-subtitle { font-size: 12px; letter-spacing: 4px; text-transform: uppercase; color: var(--muted); margin-bottom: 6px; }
-  .sandbox-badge { font-size: 11px; letter-spacing: 3px; text-transform: uppercase; color: #b07800; background: #fff8e1; border: 1px solid #f0a500; border-radius: 20px; padding: 3px 12px; margin-bottom: 36px; }
+  .setup-subtitle { font-size: 12px; letter-spacing: 4px; text-transform: uppercase; color: var(--muted); margin-bottom: 36px; }
   .setup-card { background: #fff; border: 1px solid var(--border); border-radius: 16px; padding: 36px; width: 100%; max-width: 600px; display: flex; flex-direction: column; gap: 28px; box-shadow: 0 4px 24px rgba(42,125,225,0.1); }
   .players-row { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
   .player-setup { display: flex; flex-direction: column; gap: 10px; }
@@ -57,7 +51,7 @@
   .starter-btn.active-p2 { background: var(--p2); color: #fff; }
 
   /* ===== GAME SCREEN ===== */
-  #game-screen { display: none; flex-direction: column; height: calc(100vh - 40px); padding: 6px; gap: 6px; overflow: hidden; }
+  #game-screen { display: none; flex-direction: column; height: 100vh; padding: 6px; gap: 6px; overflow: hidden; }
   .game-header { display: flex; align-items: center; justify-content: space-between; background: #fff; border: 1px solid var(--border); border-radius: 10px; padding: 5px 12px; flex-shrink: 0; gap: 6px; flex-wrap: wrap; }
   .player-badge { display: flex; align-items: center; gap: 8px; padding: 6px 14px; border-radius: 6px; border: 2px solid transparent; transition: all 0.25s; }
   .player-badge.active { border-color: var(--player-color,var(--accent)); background: color-mix(in srgb,var(--player-color,var(--accent)) 12%,transparent); }
@@ -82,18 +76,18 @@
   .macro-divider-col { background: var(--divider); grid-row: 1/-1; }
   .macro-divider-row { background: var(--divider); grid-column: 1/-1; }
   .col-header {
-  background: var(--header-bg); border-right: 1px solid var(--border); border-bottom: 1px solid var(--border);
-  padding: 4px 3px; font-size: 9px; font-weight: 700; text-align: center;
-  color: var(--text); line-height: 1.25; display: flex; align-items: center; justify-content: center;
-  text-transform: uppercase; letter-spacing: 0.2px;
-  position: sticky; top: 0; z-index: 20;
-}
+    background: var(--header-bg); border-right: 1px solid var(--border); border-bottom: 1px solid var(--border);
+    padding: 4px 3px; font-size: 9px; font-weight: 700; text-align: center;
+    color: var(--text); line-height: 1.25; display: flex; align-items: center; justify-content: center;
+    text-transform: uppercase; letter-spacing: 0.2px;
+    position: sticky; top: 0; z-index: 20;
+  }
   .row-header {
-  background: var(--header-bg); border-right: 1px solid var(--border); border-bottom: 1px solid var(--border);
-  padding: 4px 5px; font-size: 9px; font-weight: 700; color: var(--text);
-  line-height: 1.25; display: flex; align-items: center; text-transform: uppercase; letter-spacing: 0.2px;
-  justify-content: center; text-align: center;
-}
+    background: var(--header-bg); border-right: 1px solid var(--border); border-bottom: 1px solid var(--border);
+    padding: 4px 5px; font-size: 9px; font-weight: 700; color: var(--text);
+    line-height: 1.25; display: flex; align-items: center; text-transform: uppercase; letter-spacing: 0.2px;
+    justify-content: center; text-align: center;
+  }
   .grid-cell { background: var(--cell-bg); border-right: 1px solid var(--border); border-bottom: 1px solid var(--border); cursor: pointer; position: relative; overflow: hidden; transition: background 0.1s; }
   .grid-cell:hover:not(.claimed):not(.locked) { background: #ccdff5; z-index: 5; }
   .grid-cell.selectable { animation: pulse 1.6s ease-in-out infinite; }
@@ -105,55 +99,45 @@
   .cell-name { position: absolute; bottom: 3px; left: 0; right: 0; text-align: center; font-size: 8px; font-weight: 700; color: #fff; text-shadow: 0 1px 3px rgba(0,0,0,0.9); pointer-events: none; }
   .cell-name-dark { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 700; color: var(--text); pointer-events: none; text-align: center; padding: 2px; }
   .cell-border-overlay { position: absolute; inset: 0; border: 4px solid var(--claim-color,transparent); pointer-events: none; z-index: 2; }
-  .mini-won-overlay { position: absolute; inset: 0; pointer-events: none; z-index: 10; display: flex; align-items: center; justify-content: center; font-family: 'Bebas Neue', sans-serif; letter-spacing: 1px; }
 
   /* ===== MODAL ===== */
   #modal-overlay { display: none; position: fixed; inset: 0; background: rgba(10,20,40,0.55); z-index: 500; align-items: center; justify-content: center; backdrop-filter: blur(4px); }
   #modal-overlay.open { display: flex; }
-#timer-float{
-  position: fixed;
-  top: 12px;
-  left: 50%;
-  transform: translateX(-50%);
-  z-index: 1000;
-  background: rgba(255,255,255,0.95);
-  border: 1px solid var(--border);
-  border-radius: 999px;
-  padding: 8px 12px;
-  box-shadow: 0 8px 24px rgba(0,0,0,0.18);
+  #timer-float{
+    position: fixed;
+    top: 12px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 1000;
+    background: rgba(255,255,255,0.95);
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    padding: 8px 12px;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.18);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .timer-float-btn{
+    width: 34px;
+    height: 34px;
+    border-radius: 999px;
+    border: 1px solid var(--border);
+    background: #fff;
+    color: var(--muted);
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 16px;
+    letter-spacing: 1px;
+    cursor: pointer;
+    line-height: 1;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.15s;
+  }
+  .timer-float-btn:hover{ border-color: var(--accent); color: var(--accent); }
+  .timer-float-btn.running{ border-color: #e85d5d; color: #e85d5d; }
 
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-
-.timer-float-btn{
-  width: 34px;
-  height: 34px;
-  border-radius: 999px;
-  border: 1px solid var(--border);
-  background: #fff;
-  color: var(--muted);
-  font-family: 'Bebas Neue', sans-serif;
-  font-size: 16px;
-  letter-spacing: 1px;
-  cursor: pointer;
-  line-height: 1;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  transition: all 0.15s;
-}
-
-.timer-float-btn:hover{
-  border-color: var(--accent);
-  color: var(--accent);
-}
-
-.timer-float-btn.running{
-  border-color: #e85d5d;
-  color: #e85d5d;
-}
   .modal { background: #fff; border: 1px solid var(--border); border-radius: 16px; padding: 24px; width: 92%; max-width: 460px; display: flex; flex-direction: column; gap: 15px; animation: modal-in 0.2s ease; max-height: 90vh; overflow-y: auto; box-shadow: 0 8px 40px rgba(42,125,225,0.18); }
   @keyframes modal-in { from { transform: translateY(12px) scale(0.97); opacity: 0; } to { transform: none; opacity: 1; } }
   .modal-title { font-family: 'Bebas Neue', sans-serif; font-size: 13px; letter-spacing: 3px; color: var(--muted); text-transform: uppercase; }
@@ -172,39 +156,29 @@
   .btn-submit:hover { background: #1a6dd1; }
   .btn-cancel { background: transparent; color: var(--muted); border: 1px solid var(--border); border-radius: 8px; padding: 9px; font-family: 'DM Sans', sans-serif; font-size: 13px; cursor: pointer; }
   .btn-cancel:hover { border-color: var(--accent); color: var(--accent); }
-.modal-correct {
-  text-align: center;
-  font-family: 'Bebas Neue', sans-serif;
-  font-size: 56px;
-  letter-spacing: 4px;
-  padding: 24px 0;
-  animation: correct-pop 0.35s ease;
-}
-@keyframes correct-pop {
-  0% { transform: scale(0.6); opacity: 0; }
-  70% { transform: scale(1.1); }
-  100% { transform: scale(1); opacity: 1; }
-}
+  .modal-correct { text-align: center; font-family: 'Bebas Neue', sans-serif; font-size: 56px; letter-spacing: 4px; padding: 24px 0; animation: correct-pop 0.35s ease; }
+  @keyframes correct-pop { 0% { transform: scale(0.6); opacity: 0; } 70% { transform: scale(1.1); } 100% { transform: scale(1); opacity: 1; } }
 
-/* ===== TIME'S UP OVERLAY ===== */
-#timesup-overlay{
-  display:none;
-  position:fixed;
-  inset:0;
-  z-index:2000;
-  background:rgba(10,20,40,0.68);
-  align-items:center;
-  justify-content:center;
-  backdrop-filter: blur(3px);
-}
-#timesup-overlay.open{ display:flex; }
-#timesup-overlay .timesup-text{
-  font-family:'Bebas Neue', sans-serif;
-  font-size:64px;
-  letter-spacing:6px;
-  color:#fff;
-  text-shadow:0 8px 32px rgba(0,0,0,0.45);
-}
+  /* ===== TIME'S UP OVERLAY ===== */
+  #timesup-overlay{
+    display:none;
+    position:fixed;
+    inset:0;
+    z-index:2000;
+    background:rgba(10,20,40,0.68);
+    align-items:center;
+    justify-content:center;
+    backdrop-filter: blur(3px);
+  }
+  #timesup-overlay.open{ display:flex; }
+  #timesup-overlay .timesup-text{
+    font-family:'Bebas Neue', sans-serif;
+    font-size:64px;
+    letter-spacing:6px;
+    color:#fff;
+    text-shadow:0 8px 32px rgba(0,0,0,0.45);
+  }
+
   /* ===== WIN ===== */
   #win-screen { display: none; position: fixed; inset: 0; background: rgba(240,244,248,0.96); z-index: 200; align-items: center; justify-content: center; flex-direction: column; gap: 16px; text-align: center; }
   #win-screen.open { display: flex; }
@@ -231,20 +205,10 @@
 </head>
 <body style="display:flex;flex-direction:column;min-height:100vh;">
 
-<!-- Sandbox banner -->
-<div class="sandbox-banner">
-  <div>
-    <div class="sandbox-label">⚠ Sandbox Mode</div>
-    <div class="sandbox-note">For testing only — not the live competition</div>
-  </div>
-  <button class="reset-btn" onclick="confirmReset()">↺ RESET TO SETUP</button>
-</div>
-
 <!-- ========== SETUP ========== -->
 <div id="setup-screen">
   <div class="setup-title">Ultimate Tic Tac Trivia</div>
   <div class="setup-subtitle">BBH22 · Season Trivia</div>
-  <div class="sandbox-badge">SANDBOX</div>
   <div class="setup-card">
     <div class="players-row">
       <div class="player-setup">
@@ -271,9 +235,7 @@
         <button class="starter-btn" id="starter-p2" onclick="setStarter(1)">Player 2 Goes First</button>
       </div>
     </div>
-    <button class="start-btn" onclick="startGame()">START SANDBOX</button>
-    <a href="/index.html" style="text-align:center;color:var(--muted);font-family:'DM Sans',sans-serif;font-size:13px;text-decoration:none;letter-spacing:1px;">← Go to Main Game</a>
-    <a href="/example.html" style="text-align:center;color:var(--muted);font-family:'DM Sans',sans-serif;font-size:13px;text-decoration:none;letter-spacing:1px;">Go to Example →</a>
+    <button class="start-btn" onclick="startGame()">START CHALLENGE</button>
   </div>
 </div>
 
@@ -283,34 +245,33 @@
     <div class="player-badge" id="badge-p1">
       <div class="badge-dot" id="dot-p1" style="background:#e85d5d"></div>
       <div class="badge-name" id="name-p1">Player 1</div>
-<div class="badge-last" id="last-p1" style="font-size:10px;color:var(--muted);letter-spacing:0.5px;min-height:14px;"></div>
-<div class="badge-score">🏆 <span id="score-p1">0</span> / 3</div>
+      <div class="badge-last" id="last-p1" style="font-size:10px;color:var(--muted);letter-spacing:0.5px;min-height:14px;"></div>
+      <div class="badge-score">🏆 <span id="score-p1">0</span> / 3</div>
     </div>
+
     <div style="text-align:center;display:flex;flex-direction:column;align-items:center;gap:6px;">
-  <div class="turn-indicator">Current Turn<span class="turn-name" id="turn-display" style="color:var(--accent)">—</span></div>
-  <div id="timer-float">
-  <div class="timer-display" id="timer-display">1:00</div>
+      <div class="turn-indicator">Current Turn<span class="turn-name" id="turn-display" style="color:var(--accent)">—</span></div>
 
-  <!-- floating pause/start button -->
-  <button class="timer-float-btn" id="timer-toggle-btn" onclick="toggleTimer()" title="Start / Pause">
-    ▶
-  </button>
-</div>
+      <div id="timer-float">
+        <div class="timer-display" id="timer-display">1:00</div>
+        <button class="timer-float-btn" id="timer-toggle-btn" onclick="toggleTimer()" title="Start / Pause">▶</button>
+      </div>
 
-<!-- keep reset below if you want -->
-<div class="timer-controls">
-  <button class="timer-btn" onclick="resetTimer()">↺ RESET</button>
-</div>
-  <button class="header-reset" onclick="confirmReset()">↺ RESET</button>
-  <a href="/index.html" style="background:transparent;border:1px solid var(--border);color:var(--muted);border-radius:6px;padding:5px 14px;font-family:'Bebas Neue',sans-serif;font-size:13px;letter-spacing:2px;text-decoration:none;">← MAIN GAME</a>
-</div>
+      <div class="timer-controls">
+        <button class="timer-btn" onclick="resetTimer()">↺ RESET</button>
+      </div>
+
+      <button class="header-reset" onclick="confirmReset()">↺ RESET</button>
+    </div>
+
     <div class="player-badge" id="badge-p2">
       <div class="badge-dot" id="dot-p2" style="background:#4caf50"></div>
       <div class="badge-name" id="name-p2">Player 2</div>
-<div class="badge-last" id="last-p2" style="font-size:10px;color:var(--muted);letter-spacing:0.5px;min-height:14px;"></div>
-<div class="badge-score">🏆 <span id="score-p2">0</span> / 3</div>
+      <div class="badge-last" id="last-p2" style="font-size:10px;color:var(--muted);letter-spacing:0.5px;min-height:14px;"></div>
+      <div class="badge-score">🏆 <span id="score-p2">0</span> / 3</div>
     </div>
   </div>
+
   <div class="grid-wrapper">
     <div class="mega-grid" id="mega-grid"></div>
   </div>
@@ -380,11 +341,11 @@ function toggleTimer(){
       timerSeconds--;
       updateTimerDisplay();
       if(timerSeconds<=0){
-  clearInterval(timerInterval);timerInterval=null;timerRunning=false;
-  document.getElementById('timer-toggle-btn').textContent='▶';
-  document.getElementById('timer-toggle-btn').classList.remove('running');
-  handleTimesUp();
-}
+        clearInterval(timerInterval);timerInterval=null;timerRunning=false;
+        document.getElementById('timer-toggle-btn').textContent='▶';
+        document.getElementById('timer-toggle-btn').classList.remove('running');
+        handleTimesUp();
+      }
     },1000);
   }
 }
@@ -408,34 +369,22 @@ function showTimesUpFlash(){
   });
 }
 
-// Resets to full time but does NOT auto-start unless told to
-function setTimerToFull(){
-  timerSeconds=60;
-  updateTimerDisplay();
-}
-
-// Used when time expires and no guess was confirmed/committed.
 async function handleTimesUp(){
   const modalOpen = document.getElementById('modal-overlay').classList.contains('open');
-
-  // hard stop any running timer
   clearInterval(timerInterval);
   timerInterval = null;
   timerRunning = false;
 
-  // flash + close modal if needed
   await showTimesUpFlash();
   if(modalOpen) closeModal();
 
-  // Switch turn + clear restrictions for the player who timed out
   forcedMacro = null;
   lastGuessed[currentPlayer] = null;
   currentPlayer = 1 - currentPlayer;
 
-  // Reset timer to full and start immediately
-  resetTimer();   // sets 60 and updates UI
+  resetTimer();
   updateUI();
-  toggleTimer();  // starts countdown
+  toggleTimer();
 }
 
 function updateTimerDisplay(){
@@ -446,8 +395,17 @@ function updateTimerDisplay(){
   d.classList.toggle('warning',timerSeconds<=10);
 }
 
-function initState(){board=Array.from({length:9},()=>Array(9).fill(null));miniWon=Array.from({length:3},()=>Array(3).fill(null));currentPlayer=starterPlayer;scores=[0,0];forcedMacro=null;activeCell=null;wrongGuesses=Array.from({length:9},()=>Array.from({length:9},()=>new Set()));
-lastGuessed=[null,null];resetTimer();}
+function initState(){
+  board=Array.from({length:9},()=>Array(9).fill(null));
+  miniWon=Array.from({length:3},()=>Array(3).fill(null));
+  currentPlayer=starterPlayer;
+  scores=[0,0];
+  forcedMacro=null;
+  activeCell=null;
+  wrongGuesses=Array.from({length:9},()=>Array.from({length:9},()=>new Set()));
+  lastGuessed=[null,null];
+  resetTimer();
+}
 
 document.getElementById('p1-color').addEventListener('input',e=>document.getElementById('p1-preview').style.background=e.target.value);
 document.getElementById('p2-color').addEventListener('input',e=>document.getElementById('p2-preview').style.background=e.target.value);
@@ -504,20 +462,27 @@ function buildGrid(){
 }
 
 function updateUI(){
-  const td=document.getElementById('turn-display');td.textContent=players[currentPlayer].name;td.style.color=players[currentPlayer].color;
+  const td=document.getElementById('turn-display');
+  td.textContent=players[currentPlayer].name;
+  td.style.color=players[currentPlayer].color;
+
   document.getElementById('badge-p1').classList.toggle('active',currentPlayer===0);
   document.getElementById('badge-p2').classList.toggle('active',currentPlayer===1);
+
   document.getElementById('score-p1').textContent=scores[0];
-document.getElementById('score-p2').textContent=scores[1];
-document.getElementById('last-p1').textContent=lastGuessed[0]?`Last: ${lastGuessed[0]}`:'';
-document.getElementById('last-p2').textContent=lastGuessed[1]?`Last: ${lastGuessed[1]}`:'';
+  document.getElementById('score-p2').textContent=scores[1];
+
+  document.getElementById('last-p1').textContent=lastGuessed[0]?`Last: ${lastGuessed[0]}`:'';
+  document.getElementById('last-p2').textContent=lastGuessed[1]?`Last: ${lastGuessed[1]}`:'';
+
   for(let r=0;r<9;r++)for(let c=0;c<9;c++){
-    const cell=document.getElementById(`cell-${r}-${c}`);cell.classList.remove('selectable','locked');
+    const cell=document.getElementById(`cell-${r}-${c}`);
+    cell.classList.remove('selectable','locked');
     const mr=Math.floor(r/3),mc=Math.floor(c/3);
     if(!board[r][c]){
-      if(miniWon[mr][mc]!==null)cell.classList.add('locked');
-      else if(forcedMacro===null)cell.classList.add('selectable');
-      else if(mr===forcedMacro.mr&&mc===forcedMacro.mc)cell.classList.add('selectable');
+      if(miniWon[mr][mc]!==null) cell.classList.add('locked');
+      else if(forcedMacro===null) cell.classList.add('selectable');
+      else if(mr===forcedMacro.mr&&mc===forcedMacro.mc) cell.classList.add('selectable');
       else cell.classList.add('locked');
     }
   }
@@ -535,19 +500,29 @@ function onCellClick(r,c){
   `;
   refreshCastList(r,c);
   document.getElementById('modal-overlay').classList.add('open');
-document.body.classList.add('modal-open');
+  document.body.classList.add('modal-open');
 }
 
 function refreshCastList(r,c){
   const mr=Math.floor(r/3),mc=Math.floor(c/3),used={};
-  for(let i=0;i<3;i++)for(let j=0;j<3;j++){const d=board[mr*3+i][mc*3+j];if(d)used[d.name]=(used[d.name]||0)+1;}
+  for(let i=0;i<3;i++)for(let j=0;j<3;j++){
+    const d=board[mr*3+i][mc*3+j];
+    if(d)used[d.name]=(used[d.name]||0)+1;
+  }
   const roster=document.getElementById('cast-roster'),sel=document.getElementById('answer-select');
   if(!roster||!sel)return;
-  roster.innerHTML='';sel.innerHTML='<option value="">— choose —</option>';
+  roster.innerHTML='';
+  sel.innerHTML='<option value="">— choose —</option>';
   ALL_CAST.forEach(n=>{
     const struck=wrongGuesses[r][c].has(n)||(used[n]||0)>=2||n===lastGuessed[currentPlayer];
-    const t=document.createElement('div');t.className='cast-tag'+(struck?' strikeout':'');t.textContent=n;roster.appendChild(t);
-    if(!struck){const o=document.createElement('option');o.value=n;o.textContent=n;sel.appendChild(o);}
+    const t=document.createElement('div');
+    t.className='cast-tag'+(struck?' strikeout':'');
+    t.textContent=n;
+    roster.appendChild(t);
+    if(!struck){
+      const o=document.createElement('option');
+      o.value=n;o.textContent=n;sel.appendChild(o);
+    }
   });
 }
 
@@ -575,20 +550,15 @@ function confirmAnswer(name){
   if(VALID_ANSWERS[r][c].includes(name)){
     document.getElementById('modal-inner').innerHTML=`<div class="modal-correct" style="color:${players[currentPlayer].color}">CORRECT!</div>`;
     setTimeout(()=>commitCorrect(r,c,name),900);
-    } else {
+  } else {
     wrongGuesses[r][c].add(name);
     document.getElementById('modal-inner').innerHTML=`<div class="modal-correct" style="color:#e85d5d">INCORRECT!</div>`;
     setTimeout(()=>{
       forcedMacro = null;
       lastGuessed[currentPlayer] = null;
-
-      // switch turn
       currentPlayer = 1 - currentPlayer;
-
-      // reset timer + start it (same as correct)
       resetTimer();
       toggleTimer();
-
       closeModal();
       updateUI();
     }, 900);
@@ -607,25 +577,34 @@ function reopenGuess(r,c){
 }
 
 function commitCorrect(r,c,name){
-  board[r][c]={player:currentPlayer,name,photo:CAST_PHOTOS[name]||''};renderCell(r,c);
+  board[r][c]={player:currentPlayer,name,photo:CAST_PHOTOS[name]||''};
+  renderCell(r,c);
+
   const mr=Math.floor(r/3),mc=Math.floor(c/3),res=checkMiniTTT(mr,mc);
   let won=false;
-  if(res!==null&&miniWon[mr][mc]===null){miniWon[mr][mc]=res;scores[res]++;renderMiniWon(mr,mc,res);won=true;if(scores[0]>=3||scores[1]>=3){closeModal();showWinScreen(res);return;}}
+  if(res!==null && miniWon[mr][mc]===null){
+    miniWon[mr][mc]=res;
+    scores[res]++;
+    renderMiniWon(mr,mc,res);
+    won=true;
+    if(scores[0]>=3||scores[1]>=3){ closeModal(); showWinScreen(res); return; }
+  }
+
   const nm=r%3,nc=c%3;
   if(won){
-  forcedMacro=(miniWon[nm][nc]===null&&!isMiniGridFull(nm,nc))?{mr:nm,mc:nc}:null;
-}else{
-  forcedMacro=(miniWon[nm][nc]!==null||isMiniGridFull(nm,nc))?null:{mr:nm,mc:nc};
-}
+    forcedMacro=(miniWon[nm][nc]===null && !isMiniGridFull(nm,nc))?{mr:nm,mc:nc}:null;
+  } else {
+    forcedMacro=(miniWon[nm][nc]!==null || isMiniGridFull(nm,nc))?null:{mr:nm,mc:nc};
+  }
+
   lastGuessed[currentPlayer]=name;
-currentPlayer=1-currentPlayer;
+  currentPlayer=1-currentPlayer;
 
-// reset to 1:00 and keep paused after a correct answer
-resetTimer();
-toggleTimer(); // start immediately after resetting
+  resetTimer();
+  toggleTimer();
 
-closeModal();
-updateUI();
+  closeModal();
+  updateUI();
 }
 
 function closeModal(){
@@ -635,19 +614,41 @@ function closeModal(){
 }
 
 function renderCell(r,c){
-  const cell=document.getElementById(`cell-${r}-${c}`),data=board[r][c];if(!data)return;
-  cell.classList.add('claimed');cell.innerHTML='';
-  if(data.photo){const img=document.createElement('img');img.className='cell-photo';img.src=data.photo;img.alt=data.name;cell.appendChild(img);const g=document.createElement('div');g.className='cell-gradient';cell.appendChild(g);const n=document.createElement('div');n.className='cell-name';n.textContent=data.name;cell.appendChild(n);}
-  else{cell.style.background=`color-mix(in srgb,${players[data.player].color} 30%,var(--cell-bg))`;const n=document.createElement('div');n.className='cell-name-dark';n.textContent=data.name;cell.appendChild(n);}
+  const cell=document.getElementById(`cell-${r}-${c}`),data=board[r][c];
+  if(!data)return;
+  cell.classList.add('claimed');
+  cell.innerHTML='';
+  if(data.photo){
+    const img=document.createElement('img');img.className='cell-photo';img.src=data.photo;img.alt=data.name;cell.appendChild(img);
+    const g=document.createElement('div');g.className='cell-gradient';cell.appendChild(g);
+    const n=document.createElement('div');n.className='cell-name';n.textContent=data.name;cell.appendChild(n);
+  } else {
+    cell.style.background=`color-mix(in srgb,${players[data.player].color} 30%,var(--cell-bg))`;
+    const n=document.createElement('div');n.className='cell-name-dark';n.textContent=data.name;cell.appendChild(n);
+  }
   const b=document.createElement('div');b.className='cell-border-overlay';b.style.setProperty('--claim-color',players[data.player].color);cell.appendChild(b);
 }
 
 function checkMiniTTT(mr,mc){
-  const g=Array.from({length:3},(_,i)=>Array.from({length:3},(_,j)=>{const d=board[mr*3+i][mc*3+j];return d?d.player:null;}));
-  for(const l of[[[0,0],[0,1],[0,2]],[[1,0],[1,1],[1,2]],[[2,0],[2,1],[2,2]],[[0,0],[1,0],[2,0]],[[0,1],[1,1],[2,1]],[[0,2],[1,2],[2,2]],[[0,0],[1,1],[2,2]],[[0,2],[1,1],[2,0]]]){const v=l.map(([ri,ci])=>g[ri][ci]);if(v[0]!==null&&v[0]===v[1]&&v[1]===v[2])return v[0];}
+  const g=Array.from({length:3},(_,i)=>Array.from({length:3},(_,j)=>{
+    const d=board[mr*3+i][mc*3+j];
+    return d?d.player:null;
+  }));
+  for(const l of[
+    [[0,0],[0,1],[0,2]],[[1,0],[1,1],[1,2]],[[2,0],[2,1],[2,2]],
+    [[0,0],[1,0],[2,0]],[[0,1],[1,1],[2,1]],[[0,2],[1,2],[2,2]],
+    [[0,0],[1,1],[2,2]],[[0,2],[1,1],[2,0]]
+  ]){
+    const v=l.map(([ri,ci])=>g[ri][ci]);
+    if(v[0]!==null && v[0]===v[1] && v[1]===v[2]) return v[0];
+  }
   return null;
 }
-function isMiniGridFull(mr,mc){for(let i=0;i<3;i++)for(let j=0;j<3;j++)if(!board[mr*3+i][mc*3+j])return false;return true;}
+
+function isMiniGridFull(mr,mc){
+  for(let i=0;i<3;i++)for(let j=0;j<3;j++) if(!board[mr*3+i][mc*3+j]) return false;
+  return true;
+}
 
 function renderMiniWon(mr,mc,p){
   const col=players[p].color;
@@ -657,7 +658,7 @@ function renderMiniWon(mr,mc,p){
     cell.innerHTML='';
     cell.style.background=col;
     const n=document.createElement('div');
-    n.style.cssText='position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-family:\'Bebas Neue\',sans-serif;font-size:11px;letter-spacing:1px;color:#fff;text-shadow:0 1px 3px rgba(0,0,0,0.4);text-align:center;padding:2px;';
+    n.style.cssText="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-family:'Bebas Neue',sans-serif;font-size:11px;letter-spacing:1px;color:#fff;text-shadow:0 1px 3px rgba(0,0,0,0.4);text-align:center;padding:2px;";
     n.textContent=players[p].name.toUpperCase();
     cell.appendChild(n);
   }
@@ -669,7 +670,9 @@ function showWinScreen(p){
   document.getElementById('win-screen').classList.add('open');
 }
 
-document.getElementById('modal-overlay').addEventListener('click',function(e){if(e.target===this)closeModal();});
+document.getElementById('modal-overlay').addEventListener('click',function(e){
+  if(e.target===this)closeModal();
+});
 </script>
 </body>
 </html>
