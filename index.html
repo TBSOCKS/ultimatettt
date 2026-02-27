@@ -39,7 +39,7 @@
 
   /* ===== GAME SCREEN ===== */
   #game-screen { display: none; flex-direction: column; height: 100vh; padding: 6px; gap: 6px; overflow: hidden; }
-  .game-header { display: flex; align-items: center; justify-content: space-between; background: #fff; border: 1px solid var(--border); border-radius: 10px; padding: 5px 12px; flex-shrink: 0; gap: 6px; flex-wrap: wrap; }
+  .game-header { display: flex; align-items: center; justify-content: space-between; background: #fff; border: 1px solid var(--border); border-radius: 10px; padding: 5px 12px; flex-shrink: 0; gap: 6px; flex-wrap: wrap; position: relative; z-index: 101; }
   .player-badge { display: flex; align-items: center; gap: 8px; padding: 6px 14px; border-radius: 6px; border: 2px solid transparent; transition: all 0.25s; }
   .player-badge.active { border-color: var(--player-color,var(--accent)); background: color-mix(in srgb,var(--player-color,var(--accent)) 12%,transparent); }
   .badge-dot { width: 11px; height: 11px; border-radius: 50%; flex-shrink: 0; }
