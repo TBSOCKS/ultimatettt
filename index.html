@@ -528,36 +528,36 @@ document.getElementById('last-p2').textContent=lastGuessed[1]?`Last: ${lastGuess
 }
 
 function onCellClick(r,c){
-  if(!document.getElementById(`cell-${r}-${c}`).classList.contains('selectable'))return;
-  activeCell={r,c};
+  if(!document.getElementById(`cell-${r}-${c}`).classList.contains('selectable')) return;
+
+  activeCell = { r, c };
+
   document.getElementById('modal-inner').innerHTML=`
-    <div class="modal-title">Make Your Guess</div>
-    document.getElementById('modal-inner').innerHTML=`
-  <div class="modal-title">Make Your Guess</div>
-
-  <div class="modal-timer">
-    <div class="timer-display" id="timer-display-modal">1:00</div>
-  </div>
-
-  ...
-`;
-document.getElementById('modal-inner').innerHTML=`
   <div class="modal-title">Confirm Your Answer</div>
 
   <div class="modal-timer">
     <div class="timer-display" id="timer-display-modal">1:00</div>
   </div>
 
-  ...
+  <div class="modal-cats">
+    <div class="modal-cat"><span>Column</span>${COL_CATS[c]}</div>
+    <div class="modal-cat"><span>Row</span>${ROW_CATS[r]}</div>
+  </div>
+
+  <div style="text-align:center;padding:8px 0;font-family:'Bebas Neue',sans-serif;font-size:22px;letter-spacing:2px;color:${players[currentPlayer].color}">
+    ${name}
+  </div>
+
+  <div class="modal-btns">
+    <button class="btn-submit" onclick="confirmAnswer('${name}')">CONFIRM</button>
+    <button class="btn-cancel" onclick="reopenGuess(${r},${c})">← CHANGE ANSWER</button>
+  </div>
 `;
-    <div class="modal-cats"><div class="modal-cat"><span>Column</span>${COL_CATS[c]}</div><div class="modal-cat"><span>Row</span>${ROW_CATS[r]}</div></div>
-    <div><div class="modal-label">Cast Members</div><div class="cast-roster" id="cast-roster"></div></div>
-    <div><div class="modal-label">Select a Cast Member</div><select class="answer-select" id="answer-select"><option value="">— choose —</option></select></div>
-    <div class="modal-btns"><button class="btn-submit" onclick="submitAnswer()">SUBMIT ANSWER</button><button class="btn-cancel" onclick="closeModal()">Cancel</button></div>
-  `;
+updateTimerDisplay();
+
   refreshCastList(r,c);
   document.getElementById('modal-overlay').classList.add('open');
-document.body.classList.add('modal-open');
+  document.body.classList.add('modal-open');
 }
 
 function refreshCastList(r,c){
