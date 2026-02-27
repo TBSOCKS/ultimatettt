@@ -75,18 +75,18 @@
   .macro-divider-row { background: var(--divider); grid-column: 1/-1; }
 
   .col-header {
-  background: var(--header-bg); border-right: 1px solid var(--border); border-bottom: 1px solid var(--border);
-  padding: 4px 3px; font-size: 9px; font-weight: 700; text-align: center;
-  color: var(--text); line-height: 1.25; display: flex; align-items: center; justify-content: center;
-  text-transform: uppercase; letter-spacing: 0.2px;
-  position: sticky; top: 0; z-index: 20;
-}
+    background: var(--header-bg); border-right: 1px solid var(--border); border-bottom: 1px solid var(--border);
+    padding: 4px 3px; font-size: 9px; font-weight: 700; text-align: center;
+    color: var(--text); line-height: 1.25; display: flex; align-items: center; justify-content: center;
+    text-transform: uppercase; letter-spacing: 0.2px;
+    position: sticky; top: 0; z-index: 20;
+  }
   .row-header {
-  background: var(--header-bg); border-right: 1px solid var(--border); border-bottom: 1px solid var(--border);
-  padding: 4px 5px; font-size: 9px; font-weight: 700; color: var(--text);
-  line-height: 1.25; display: flex; align-items: center; text-transform: uppercase; letter-spacing: 0.2px;
-  justify-content: center; text-align: center;
-}
+    background: var(--header-bg); border-right: 1px solid var(--border); border-bottom: 1px solid var(--border);
+    padding: 4px 5px; font-size: 9px; font-weight: 700; color: var(--text);
+    line-height: 1.25; display: flex; align-items: center; text-transform: uppercase; letter-spacing: 0.2px;
+    justify-content: center; text-align: center;
+  }
 
   .grid-cell {
     background: var(--cell-bg); border-right: 1px solid var(--border); border-bottom: 1px solid var(--border);
@@ -108,7 +108,7 @@
   .cell-border-overlay { position: absolute; inset: 0; border: 4px solid var(--claim-color, transparent); pointer-events: none; z-index: 2; }
   .mini-won-overlay { position: absolute; inset: 0; pointer-events: none; z-index: 10; display: flex; align-items: center; justify-content: center; font-family: 'Bebas Neue', sans-serif; letter-spacing: 1px; }
 
-   /* ===== MODAL ===== */
+  /* ===== MODAL ===== */
   #modal-overlay { display: none; position: fixed; inset: 0; background: rgba(10,20,40,0.55); z-index: 200; align-items: center; justify-content: center; backdrop-filter: blur(4px); }
   #modal-overlay.open { display: flex; }
 
@@ -116,6 +116,7 @@
   .game-header { position: relative; z-index: 300; }
 
   .modal { background: #fff; border: 1px solid var(--border); border-radius: 16px; padding: 24px; width: 92%; max-width: 460px; display: flex; flex-direction: column; gap: 15px; animation: modal-in 0.2s ease; max-height: 90vh; overflow-y: auto; box-shadow: 0 8px 40px rgba(42,125,225,0.18); }
+  @keyframes modal-in { from { transform: translateY(12px) scale(0.97); opacity: 0; } to { transform: none; opacity: 1; } }
 
   .modal-title { font-family: 'Bebas Neue', sans-serif; font-size: 13px; letter-spacing: 3px; color: var(--muted); text-transform: uppercase; }
   .modal-cats { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
@@ -178,7 +179,7 @@
     </div>
     <button class="start-btn" onclick="startGame()">START COMPETITION</button>
     <a href="/test.html" style="text-align:center;color:var(--muted);font-family:'DM Sans',sans-serif;font-size:13px;text-decoration:none;letter-spacing:1px;">Go to Sandbox →</a>
-<a href="/example.html" style="text-align:center;color:var(--muted);font-family:'DM Sans',sans-serif;font-size:13px;text-decoration:none;letter-spacing:1px;">Go to Example →</a>
+    <a href="/example.html" style="text-align:center;color:var(--muted);font-family:'DM Sans',sans-serif;font-size:13px;text-decoration:none;letter-spacing:1px;">Go to Example →</a>
   </div>
 </div>
 
@@ -187,25 +188,28 @@
     <div class="player-badge" id="badge-p1">
       <div class="badge-dot" id="dot-p1" style="background:#e85d5d"></div>
       <div class="badge-name" id="name-p1">Player 1</div>
-<div class="badge-last" id="last-p1" style="font-size:10px;color:var(--muted);letter-spacing:0.5px;min-height:14px;"></div>
-<div class="badge-score">🏆 <span id="score-p1">0</span> / 3</div>
+      <div class="badge-last" id="last-p1" style="font-size:10px;color:var(--muted);letter-spacing:0.5px;min-height:14px;"></div>
+      <div class="badge-score">🏆 <span id="score-p1">0</span> / 3</div>
     </div>
+
     <div style="text-align:center;display:flex;flex-direction:column;align-items:center;gap:6px;">
- <div class="turn-indicator">Current Turn<span class="turn-name" id="turn-display" style="color:var(--accent)">—</span></div>
-  <div class="timer-display" id="timer-display">0:30</div>
-  <div class="timer-controls">
-    <button class="timer-btn" id="timer-toggle-btn" onclick="toggleTimer()">▶ START</button>
-    <button class="timer-btn" onclick="resetTimer()">↺ RESET</button>
-  </div>
-  <a href="/test.html" style="background:transparent;border:1px solid var(--border);color:var(--muted);border-radius:6px;padding:5px 14px;font-family:'Bebas Neue',sans-serif;font-size:13px;letter-spacing:2px;text-decoration:none;">SANDBOX →</a>
-</div>
+      <div class="turn-indicator">Current Turn<span class="turn-name" id="turn-display" style="color:var(--accent)">—</span></div>
+      <div class="timer-display" id="timer-display">0:30</div>
+      <div class="timer-controls">
+        <button class="timer-btn" id="timer-toggle-btn" onclick="toggleTimer()">▶ START</button>
+        <button class="timer-btn" onclick="resetTimer()">↺ RESET</button>
+      </div>
+      <a href="/test.html" style="background:transparent;border:1px solid var(--border);color:var(--muted);border-radius:6px;padding:5px 14px;font-family:'Bebas Neue',sans-serif;font-size:13px;letter-spacing:2px;text-decoration:none;">SANDBOX →</a>
+    </div>
+
     <div class="player-badge" id="badge-p2">
       <div class="badge-dot" id="dot-p2" style="background:#4caf50"></div>
       <div class="badge-name" id="name-p2">Player 2</div>
-<div class="badge-last" id="last-p2" style="font-size:10px;color:var(--muted);letter-spacing:0.5px;min-height:14px;"></div>
-<div class="badge-score">🏆 <span id="score-p2">0</span> / 3</div>
+      <div class="badge-last" id="last-p2" style="font-size:10px;color:var(--muted);letter-spacing:0.5px;min-height:14px;"></div>
+      <div class="badge-score">🏆 <span id="score-p2">0</span> / 3</div>
     </div>
   </div>
+
   <div class="grid-wrapper">
     <div class="mega-grid" id="mega-grid"></div>
   </div>
@@ -234,8 +238,6 @@ let players=[{name:"Player 1",color:"#e85d5d"},{name:"Player 2",color:"#4caf50"}
 let board,miniWon,currentPlayer,scores,forcedMacro,activeCell,wrongGuesses,lastGuessed;
 let starterPlayer=0;
 let timerSeconds=30,timerInterval=null,timerRunning=false;
-let timerHasStartedOnce = false;
-let awaitingAnswer = false;
 
 function setStarter(p){
   starterPlayer=p;
@@ -249,28 +251,24 @@ function toggleTimer(){
     document.getElementById('timer-toggle-btn').textContent='▶ START';
     document.getElementById('timer-toggle-btn').classList.remove('running');
   } else {
-    timerHasStartedOnce = true;
     timerRunning=true;
     document.getElementById('timer-toggle-btn').textContent='⏸ STOP';
     document.getElementById('timer-toggle-btn').classList.add('running');
     timerInterval=setInterval(()=>{
       timerSeconds--;
       updateTimerDisplay();
-
       if(timerSeconds<=0){
         clearInterval(timerInterval);timerInterval=null;timerRunning=false;
         document.getElementById('timer-toggle-btn').textContent='▶ START';
         document.getElementById('timer-toggle-btn').classList.remove('running');
-
-        onTimerExpired();
       }
     },1000);
   }
 }
 
 function resetTimer(){
-  clearInterval(timerInterval);timerInterval=null;timerRunning=false;
-  timerSeconds=30;updateTimerDisplay();
+  clearInterval(timerInterval); timerInterval=null; timerRunning=false;
+  timerSeconds=30; updateTimerDisplay();
   document.getElementById('timer-toggle-btn').textContent='▶ START';
   document.getElementById('timer-toggle-btn').classList.remove('running');
 }
@@ -283,28 +281,17 @@ function updateTimerDisplay(){
   d.classList.toggle('warning',timerSeconds<=10);
 }
 
-function startTimerIfAllowed(){
-  if(timerHasStartedOnce && !timerRunning){
-    toggleTimer();
-  }
-}
-
-function onTimerExpired(){
-  // Always switch turns when timer hits 0
-  forcedMacro = null;
-  lastGuessed[currentPlayer] = null;
-  currentPlayer = 1 - currentPlayer;
-
-  // Close modal if it's open (safe to call either way)
-  closeModal();
-
+function initState(){
+  board=Array.from({length:9},()=>Array(9).fill(null));
+  miniWon=Array.from({length:3},()=>Array(3).fill(null));
+  currentPlayer=starterPlayer;
+  scores=[0,0];
+  forcedMacro=null;
+  activeCell=null;
+  wrongGuesses=Array.from({length:9},()=>Array.from({length:9},()=>new Set()));
+  lastGuessed=[null,null];
   resetTimer();
-  startTimerIfAllowed();
-  updateUI();
 }
-
-function initState(){board=Array.from({length:9},()=>Array(9).fill(null));miniWon=Array.from({length:3},()=>Array(3).fill(null));currentPlayer=starterPlayer;scores=[0,0];forcedMacro=null;activeCell=null;wrongGuesses=Array.from({length:9},()=>Array.from({length:9},()=>new Set()));
-lastGuessed=[null,null];resetTimer();}
 
 document.getElementById('p1-color').addEventListener('input',e=>document.getElementById('p1-preview').style.background=e.target.value);
 document.getElementById('p2-color').addEventListener('input',e=>document.getElementById('p2-preview').style.background=e.target.value);
@@ -337,36 +324,48 @@ function buildGrid(){
   for(let r=0;r<9;r++){
     const gr2=grow(r);
     const rh=document.createElement('div');rh.className='row-header';rh.style.cssText=`grid-column:1;grid-row:${gr2};`;rh.textContent=ROW_CATS[r];g.appendChild(rh);
-    for(let c=0;c<9;c++){const cell=document.createElement('div');cell.className='grid-cell';cell.id=`cell-${r}-${c}`;cell.style.cssText=`grid-column:${gcol(c)};grid-row:${gr2};`;cell.addEventListener('click',()=>onCellClick(r,c));g.appendChild(cell);}
+    for(let c=0;c<9;c++){
+      const cell=document.createElement('div');
+      cell.className='grid-cell';
+      cell.id=`cell-${r}-${c}`;
+      cell.style.cssText=`grid-column:${gcol(c)};grid-row:${gr2};`;
+      cell.addEventListener('click',()=>onCellClick(r,c));
+      g.appendChild(cell);
+    }
   }
 }
 
 function updateUI(){
-  const td=document.getElementById('turn-display');td.textContent=players[currentPlayer].name;td.style.color=players[currentPlayer].color;
+  const td=document.getElementById('turn-display');
+  td.textContent=players[currentPlayer].name;
+  td.style.color=players[currentPlayer].color;
+
   document.getElementById('badge-p1').classList.toggle('active',currentPlayer===0);
   document.getElementById('badge-p2').classList.toggle('active',currentPlayer===1);
+
   document.getElementById('score-p1').textContent=scores[0];
-document.getElementById('score-p2').textContent=scores[1];
-document.getElementById('last-p1').textContent=lastGuessed[0]?`Last: ${lastGuessed[0]}`:'';
-document.getElementById('last-p2').textContent=lastGuessed[1]?`Last: ${lastGuessed[1]}`:'';
+  document.getElementById('score-p2').textContent=scores[1];
+
+  document.getElementById('last-p1').textContent=lastGuessed[0]?`Last: ${lastGuessed[0]}`:'';
+  document.getElementById('last-p2').textContent=lastGuessed[1]?`Last: ${lastGuessed[1]}`:'';
+
   for(let r=0;r<9;r++)for(let c=0;c<9;c++){
-    const cell=document.getElementById(`cell-${r}-${c}`);cell.classList.remove('selectable','locked');
+    const cell=document.getElementById(`cell-${r}-${c}`);
+    cell.classList.remove('selectable','locked');
     const mr=Math.floor(r/3),mc=Math.floor(c/3);
     if(!board[r][c]){
-      if(miniWon[mr][mc]!==null)cell.classList.add('locked');
-      else if(forcedMacro===null)cell.classList.add('selectable');
-      else if(mr===forcedMacro.mr&&mc===forcedMacro.mc)cell.classList.add('selectable');
+      if(miniWon[mr][mc]!==null) cell.classList.add('locked');
+      else if(forcedMacro===null) cell.classList.add('selectable');
+      else if(mr===forcedMacro.mr && mc===forcedMacro.mc) cell.classList.add('selectable');
       else cell.classList.add('locked');
     }
   }
 }
 
 function onCellClick(r,c){
-  if(!document.getElementById(`cell-${r}-${c}`).classList.contains('selectable'))return;
-    activeCell={r,c};
-  awaitingAnswer = true;
-  const mi=document.getElementById('modal-inner');
-  mi.innerHTML=`
+  if(!document.getElementById(`cell-${r}-${c}`).classList.contains('selectable')) return;
+  activeCell={r,c};
+  document.getElementById('modal-inner').innerHTML=`
     <div class="modal-title">Make Your Guess</div>
     <div class="modal-cats"><div class="modal-cat"><span>Column</span>${COL_CATS[c]}</div><div class="modal-cat"><span>Row</span>${ROW_CATS[r]}</div></div>
     <div><div class="modal-label">Cast Members</div><div class="cast-roster" id="cast-roster"></div></div>
@@ -379,21 +378,33 @@ function onCellClick(r,c){
 
 function refreshCastList(r,c){
   const mr=Math.floor(r/3),mc=Math.floor(c/3),used={};
-  for(let i=0;i<3;i++)for(let j=0;j<3;j++){const d=board[mr*3+i][mc*3+j];if(d)used[d.name]=(used[d.name]||0)+1;}
+  for(let i=0;i<3;i++)for(let j=0;j<3;j++){
+    const d=board[mr*3+i][mc*3+j];
+    if(d) used[d.name]=(used[d.name]||0)+1;
+  }
   const roster=document.getElementById('cast-roster'),sel=document.getElementById('answer-select');
-  if(!roster||!sel)return;
-  roster.innerHTML='';sel.innerHTML='<option value="">— choose —</option>';
+  if(!roster||!sel) return;
+  roster.innerHTML='';
+  sel.innerHTML='<option value="">— choose —</option>';
   ALL_CAST.forEach(n=>{
     const struck=wrongGuesses[r][c].has(n)||(used[n]||0)>=2||n===lastGuessed[currentPlayer];
-    const t=document.createElement('div');t.className='cast-tag'+(struck?' strikeout':'');t.textContent=n;roster.appendChild(t);
-    if(!struck){const o=document.createElement('option');o.value=n;o.textContent=n;sel.appendChild(o);}
+    const t=document.createElement('div');
+    t.className='cast-tag'+(struck?' strikeout':'');
+    t.textContent=n;
+    roster.appendChild(t);
+    if(!struck){
+      const o=document.createElement('option');
+      o.value=n;
+      o.textContent=n;
+      sel.appendChild(o);
+    }
   });
 }
 
 function submitAnswer(){
-  if(!activeCell)return;
-  const{r,c}=activeCell,sel=document.getElementById('answer-select'),name=sel?sel.value:'';
-  if(!name)return;
+  if(!activeCell) return;
+  const {r,c}=activeCell, sel=document.getElementById('answer-select'), name=sel?sel.value:'';
+  if(!name) return;
   document.getElementById('modal-inner').innerHTML=`
     <div class="modal-title">Confirm Your Answer</div>
     <div class="modal-cats">
@@ -409,23 +420,21 @@ function submitAnswer(){
 }
 
 function confirmAnswer(name){
-  if(!activeCell)return;
-  const{r,c}=activeCell;
+  if(!activeCell) return;
+  const {r,c}=activeCell;
   if(VALID_ANSWERS[r][c].includes(name)){
     document.getElementById('modal-inner').innerHTML=`<div class="modal-correct" style="color:${players[currentPlayer].color}">CORRECT!</div>`;
     setTimeout(()=>commitCorrect(r,c,name),900);
   } else {
     wrongGuesses[r][c].add(name);
     document.getElementById('modal-inner').innerHTML=`<div class="modal-correct" style="color:#e85d5d">INCORRECT!</div>`;
-        setTimeout(()=>{
+    setTimeout(()=>{
       forcedMacro=null;
       lastGuessed[currentPlayer]=null;
       currentPlayer=1-currentPlayer;
       closeModal();
-      resetTimer();
-      startTimerIfAllowed();
       updateUI();
-    }, 900);
+    },900);
   }
 }
 
@@ -441,44 +450,91 @@ function reopenGuess(r,c){
 }
 
 function commitCorrect(r,c,name){
-  board[r][c]={player:currentPlayer,name,photo:CAST_PHOTOS[name]||''};renderCell(r,c);
+  board[r][c]={player:currentPlayer,name,photo:CAST_PHOTOS[name]||''};
+  renderCell(r,c);
+
   const mr=Math.floor(r/3),mc=Math.floor(c/3),res=checkMiniTTT(mr,mc);
   let won=false;
-  if(res!==null&&miniWon[mr][mc]===null){miniWon[mr][mc]=res;scores[res]++;renderMiniWon(mr,mc,res);won=true;if(scores[0]>=3||scores[1]>=3){closeModal();showWinScreen(res);return;}}
+  if(res!==null && miniWon[mr][mc]===null){
+    miniWon[mr][mc]=res;
+    scores[res]++;
+    renderMiniWon(mr,mc,res);
+    won=true;
+    if(scores[0]>=3 || scores[1]>=3){
+      closeModal();
+      showWinScreen(res);
+      return;
+    }
+  }
+
   const nm=r%3,nc=c%3;
-if(won){
-  forcedMacro=(miniWon[nm][nc]===null&&!isMiniGridFull(nm,nc))?{mr:nm,mc:nc}:null;
-}else{
-  forcedMacro=(miniWon[nm][nc]!==null||isMiniGridFull(nm,nc))?null:{mr:nm,mc:nc};
-}
-    lastGuessed[currentPlayer]=name;
+  if(won){
+    forcedMacro=(miniWon[nm][nc]===null && !isMiniGridFull(nm,nc))?{mr:nm,mc:nc}:null;
+  }else{
+    forcedMacro=(miniWon[nm][nc]!==null || isMiniGridFull(nm,nc))?null:{mr:nm,mc:nc};
+  }
+
+  lastGuessed[currentPlayer]=name;
   currentPlayer=1-currentPlayer;
   closeModal();
-  resetTimer();
-  startTimerIfAllowed();
   updateUI();
 }
 
 function closeModal(){
   document.getElementById('modal-overlay').classList.remove('open');
   activeCell=null;
-  awaitingAnswer = false;
 }
 
 function renderCell(r,c){
-  const cell=document.getElementById(`cell-${r}-${c}`),data=board[r][c];if(!data)return;
-  cell.classList.add('claimed');cell.innerHTML='';
-  if(data.photo){const img=document.createElement('img');img.className='cell-photo';img.src=data.photo;img.alt=data.name;cell.appendChild(img);const g=document.createElement('div');g.className='cell-gradient';cell.appendChild(g);const n=document.createElement('div');n.className='cell-name';n.textContent=data.name;cell.appendChild(n);}
-  else{cell.style.background=`color-mix(in srgb,${players[data.player].color} 30%,var(--cell-bg))`;const n=document.createElement('div');n.className='cell-name-dark';n.textContent=data.name;cell.appendChild(n);}
-  const b=document.createElement('div');b.className='cell-border-overlay';b.style.setProperty('--claim-color',players[data.player].color);cell.appendChild(b);
+  const cell=document.getElementById(`cell-${r}-${c}`),data=board[r][c];
+  if(!data) return;
+  cell.classList.add('claimed');
+  cell.innerHTML='';
+  if(data.photo){
+    const img=document.createElement('img');
+    img.className='cell-photo';
+    img.src=data.photo;
+    img.alt=data.name;
+    cell.appendChild(img);
+    const g=document.createElement('div');
+    g.className='cell-gradient';
+    cell.appendChild(g);
+    const n=document.createElement('div');
+    n.className='cell-name';
+    n.textContent=data.name;
+    cell.appendChild(n);
+  } else {
+    cell.style.background=`color-mix(in srgb,${players[data.player].color} 30%,var(--cell-bg))`;
+    const n=document.createElement('div');
+    n.className='cell-name-dark';
+    n.textContent=data.name;
+    cell.appendChild(n);
+  }
+  const b=document.createElement('div');
+  b.className='cell-border-overlay';
+  b.style.setProperty('--claim-color',players[data.player].color);
+  cell.appendChild(b);
 }
 
 function checkMiniTTT(mr,mc){
-  const g=Array.from({length:3},(_,i)=>Array.from({length:3},(_,j)=>{const d=board[mr*3+i][mc*3+j];return d?d.player:null;}));
-  for(const l of[[[0,0],[0,1],[0,2]],[[1,0],[1,1],[1,2]],[[2,0],[2,1],[2,2]],[[0,0],[1,0],[2,0]],[[0,1],[1,1],[2,1]],[[0,2],[1,2],[2,2]],[[0,0],[1,1],[2,2]],[[0,2],[1,1],[2,0]]]){const v=l.map(([ri,ci])=>g[ri][ci]);if(v[0]!==null&&v[0]===v[1]&&v[1]===v[2])return v[0];}
+  const g=Array.from({length:3},(_,i)=>Array.from({length:3},(_,j)=>{
+    const d=board[mr*3+i][mc*3+j];
+    return d?d.player:null;
+  }));
+  for(const l of[
+    [[0,0],[0,1],[0,2]],[[1,0],[1,1],[1,2]],[[2,0],[2,1],[2,2]],
+    [[0,0],[1,0],[2,0]],[[0,1],[1,1],[2,1]],[[0,2],[1,2],[2,2]],
+    [[0,0],[1,1],[2,2]],[[0,2],[1,1],[2,0]]
+  ]){
+    const v=l.map(([ri,ci])=>g[ri][ci]);
+    if(v[0]!==null && v[0]===v[1] && v[1]===v[2]) return v[0];
+  }
   return null;
 }
-function isMiniGridFull(mr,mc){for(let i=0;i<3;i++)for(let j=0;j<3;j++)if(!board[mr*3+i][mc*3+j])return false;return true;}
+function isMiniGridFull(mr,mc){
+  for(let i=0;i<3;i++)for(let j=0;j<3;j++) if(!board[mr*3+i][mc*3+j]) return false;
+  return true;
+}
 
 function renderMiniWon(mr,mc,p){
   const col=players[p].color;
@@ -500,7 +556,9 @@ function showWinScreen(p){
   document.getElementById('win-screen').classList.add('open');
 }
 
-document.getElementById('modal-overlay').addEventListener('click',function(e){if(e.target===this)closeModal();});
+document.getElementById('modal-overlay').addEventListener('click',function(e){
+  if(e.target===this) closeModal();
+});
 </script>
 </body>
 </html>
