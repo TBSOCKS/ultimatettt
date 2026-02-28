@@ -381,7 +381,7 @@ function updateUI(){
     const cell=document.getElementById(`cell-${r}-${c}`);cell.classList.remove('selectable','locked');
     const mr=Math.floor(r/3),mc=Math.floor(c/3);
     if(!board[r][c]||miniWon[mr][mc]!==null){
-      if(miniWon[mr][mc]!==null)cell.classList.add('locked');
+      if(miniWon[mr][mc]!==null&&!cell.classList.contains('mini-won'))cell.classList.add('locked');
       else if(forcedMacro===null)cell.classList.add('selectable');
       else if(mr===forcedMacro.mr&&mc===forcedMacro.mc)cell.classList.add('selectable');
       else cell.classList.add('locked');
