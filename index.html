@@ -510,7 +510,7 @@ function renderMiniWon(mr,mc,p){
   const winSet=new Set(winLine.map(([ri,ci])=>`${ri},${ci}`));
   for(let i=0;i<3;i++)for(let j=0;j<3;j++){
     const cell=document.getElementById(`cell-${mr*3+i}-${mc*3+j}`);
-cell.classList.add('claimed');if(!winSet.has(`${i},${j}`))cell.classList.add('locked');cell.innerHTML='';cell.style.background='#e8f0f8';
+cell.classList.remove('locked');cell.classList.add('claimed');if(!winSet.has(`${i},${j}`))cell.classList.add('locked');cell.innerHTML='';cell.style.background='#e8f0f8';
     if(winSet.has(`${i},${j}`)){
       cell.classList.add('mini-won');
       cell.style.background=col;
