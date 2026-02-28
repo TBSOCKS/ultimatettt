@@ -512,6 +512,7 @@ function renderMiniWon(mr,mc,p){
     const cell=document.getElementById(`cell-${mr*3+i}-${mc*3+j}`);
 cell.classList.add('claimed');if(!winSet.has(`${i},${j}`))cell.classList.add('locked');cell.innerHTML='';cell.style.background='#e8f0f8';
     if(winSet.has(`${i},${j}`)){
+      cell.classList.add('mini-won');
       cell.style.background=col;
       const n=document.createElement('div');
       n.style.cssText=`position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-family:'DM Sans',sans-serif;font-weight:700;font-size:13px;letter-spacing:0px;color:${tc};text-shadow:0 1px 3px rgba(0,0,0,0.2);text-align:center;padding:2px;`;
