@@ -510,13 +510,19 @@ function renderMiniWon(mr,mc,p){
   const winSet=new Set(winLine.map(([ri,ci])=>`${ri},${ci}`));
   for(let i=0;i<3;i++)for(let j=0;j<3;j++){
     const cell=document.getElementById(`cell-${mr*3+i}-${mc*3+j}`);
-cell.classList.remove('locked');cell.classList.add('claimed');if(!winSet.has(`${i},${j}`))cell.classList.add('locked');cell.innerHTML='';cell.style.background='#e8f0f8';
+    cell.classList.remove('selectable','mini-won');
+    cell.innerHTML='';
     if(winSet.has(`${i},${j}`)){
-      cell.classList.add('mini-won');
+      cell.classList.remove('locked');
+      cell.classList.add('claimed','mini-won');
       cell.style.background=col;
       const n=document.createElement('div');
-      n.style.cssText=`position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-family:'DM Sans',sans-serif;font-weight:700;font-size:13px;letter-spacing:0px;color:${tc};text-shadow:0 1px 3px rgba(0,0,0,0.2);text-align:center;padding:2px;`;
-      n.textContent=players[p].name.toUpperCase();cell.appendChild(n);
+      n.style.cssText=`position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-family:'DM Sans',sans-serif;font-weight:700;font-size:13px;color:${tc};text-align:center;padding:2px;`;
+      n.textContent=players[p].name.toUpperCase();
+      cell.appendChild(n);
+    } else {
+      cell.classList.add('claimed','locked');
+      cell.style.removeProperty('background');
     }
   }
 }
